@@ -1,0 +1,18 @@
+listeners:
+  default:
+    type: tcp
+    bind: 0.0.0.0:1883
+sys_interval: 20
+auth:
+  allow-anonymous: true
+plugins:
+  - auth_file
+  - auth_anonymous
+  - amqtt_db
+
+amqtt_db:
+  mapper : wide
+  connect : 'postgresql://root:sas242@localhost/ceilometer'
+
+topic-check:
+  enabled: False
