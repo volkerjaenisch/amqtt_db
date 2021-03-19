@@ -1,8 +1,11 @@
 import inspect
+import weakref
 
 from amqtt_db.base.base_db import BaseDB
 from amqtt_db.base.base_plugin import BasePlugin
-from amqtt_db.mapper import WideMapper
+from amqtt_db.mapper.mapper import WideMapper
+
+
 
 
 class DBPlugin(BasePlugin):
@@ -11,7 +14,8 @@ class DBPlugin(BasePlugin):
     """
 
     config_path = 'amqtt_db'
-
+    db = None
+    mapper = None
 
     def __init__(self, context):
         super(DBPlugin, self).__init__(context)
@@ -40,8 +44,10 @@ class DBPlugin(BasePlugin):
 
         try:
             self.db = BaseDB.from_connection_string(connect_string)
+            self.db.parent = weakref.ref(self)
         except Exception as e:
-            print(e)
+            msg = 'Connection to DB with connect string {} failed with error {}'
+            self.context.logger.error(msg.format(connect_string, e))
 
     def get_mapper(self):
         """
@@ -56,7 +62,7 @@ class DBPlugin(BasePlugin):
             raise
 
         try:
-            self.mapper = WideMapper()
+            self.mapper = WideMapper()  # ToDo: Mapper Factory
         except Exception as e:
             print(e)
 

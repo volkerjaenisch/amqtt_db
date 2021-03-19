@@ -1,8 +1,9 @@
+from hbmqtt.mqtt import PublishPacket
+
 from amqtt_db.base.base_mapper import BaseMapper
 
 
 class WideMapper(BaseMapper):
-
 
     async def on_save_session(self, session):
         """
@@ -11,6 +12,7 @@ class WideMapper(BaseMapper):
         """
         print("saving session {}".format(session))
 
-
-    async def on_mqtt_packet_received(self, packet):
+    async def on_mqtt_packet_received(self, packet=None, session=None):
+        if not isinstance(packet, PublishPacket):
+            return
         print("saving package {}".format(packet))

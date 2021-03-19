@@ -1,17 +1,16 @@
+import weakref
 
 
-class BaseDB():
+class BaseDB(object):
     """
     Base API to the data base
     """
 
-    @classmethod
-    def from_connection_string(self, connect_string):
-        """
-        Construct from connection string
-        """
+    def __init__(self, parent, connect_string):
+        self.parent = weakref.ref(parent)
+        self.init_db(connect_string)
 
-    def init_db(self):
+    def init_db(self, connect_string):
         """
         Initialize the DB
         """
@@ -21,9 +20,9 @@ class BaseDB():
         Creates the session table
         """
 
-    def create_table(self):
+    def create_table(self, name, column_def):
         """
-        Creates a table
+        Creates a table based on table_name and column definition. Where Column_def is a dict of col_name, col_type
         """
 
     def extend_table_colums(self, table, colums):

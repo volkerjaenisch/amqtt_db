@@ -1,15 +1,20 @@
+import weakref
+
 
 class BaseMapper(object):
     """
     API for the mqtt messages
     """
 
+    def __init__(self, parent):
+        self.parent = weakref.ref(parent)
+
     @classmethod
-    def from_mapper_type(self, mapper_type):
+    def from_mapper_type(self, parent, mapper_type):
         """
         Construct a mapper from mapper type
         """
-        return BaseMapper()
+        return BaseMapper(parent)  # ToDo: Factory of mappers
 
     async def on_save_session(self, session):
         """
