@@ -1,5 +1,5 @@
 
-class BaseMapper():
+class BaseMapper(object):
     """
     API for the mqtt messages
     """
@@ -9,6 +9,7 @@ class BaseMapper():
         """
         Construct a mapper from mapper type
         """
+        return BaseMapper()
 
     async def on_save_session(self, session):
         """

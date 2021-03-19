@@ -1,7 +1,19 @@
-class BasePlugin():
+from amqtt_db.base.delegator import Delegator
+
+
+class BasePlugin(Delegator):
     """
     Plugin base class
     """
+    DELEGATED_METHODS = {
+        'mapper' : ['on_save_session',
+                    'on_find_session',
+                    'on_del_session',
+                    'on_broker_post_shutdown',
+                    'on_save_session',
+                    'on_mqtt_packet_received',
+                    ]
+    }
 
     config_path = 'plugins'   # dotted name path e.g 'plugins.timescaledb'
     config = None

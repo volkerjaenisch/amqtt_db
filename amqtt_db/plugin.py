@@ -1,6 +1,8 @@
+import inspect
+
 from amqtt_db.base.base_db import BaseDB
-from amqtt_db.base.base_mapper import BaseMapper
 from amqtt_db.base.base_plugin import BasePlugin
+from amqtt_db.mapper import WideMapper
 
 
 class DBPlugin(BasePlugin):
@@ -10,8 +12,6 @@ class DBPlugin(BasePlugin):
 
     config_path = 'amqtt_db'
 
-    mapper = None
-    db = None
 
     def __init__(self, context):
         super(DBPlugin, self).__init__(context)
@@ -21,8 +21,9 @@ class DBPlugin(BasePlugin):
         """
         Constructs the plugin by choosing the mapper and the DB interface according to the config
         """
-        self.mapper = self.get_mapper()
-        self.db = self.get_db()
+        self.get_mapper()
+        self.get_db()
+        self.register_events()
 
     def get_db(self):
         """
@@ -55,13 +56,21 @@ class DBPlugin(BasePlugin):
             raise
 
         try:
-            self.mapper = BaseMapper.from_mapper_type(mapper_type)
+            self.mapper = WideMapper()
         except Exception as e:
             print(e)
 
     def register_events(self):
         events = {}
-        for name, func in self.mapper.__dict__.items():
-            if name.startswith('on_'):
-                events[name] = func
+        method_names = inspect.getmembers(self.mapper, predicate=inspect.ismethod)
+        for method_name, method in method_names:
+            if method_name.startswith('on_'):
+                events[method_name] = method
         return events
+
+    def __getattr__(self, item):
+        try:
+            result = self.__getattribute__(item)
+        except AttributeError:
+            result = getattr(self.mapper, item)
+        return result
