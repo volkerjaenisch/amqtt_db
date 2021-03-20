@@ -3,6 +3,7 @@ import weakref
 
 from amqtt_db.base.base_db import BaseDB
 from amqtt_db.base.base_plugin import BasePlugin
+from amqtt_db.db.db_sa import SA
 from amqtt_db.mapper.mapper import WideMapper
 
 
@@ -43,7 +44,7 @@ class DBPlugin(BasePlugin):
             raise
 
         try:
-            self.db = BaseDB.from_connection_string(connect_string)
+            self.db = SA(self, 'sqlite:///data.sqlite')
             self.db.parent = weakref.ref(self)
         except Exception as e:
             msg = 'Connection to DB with connect string {} failed with error {}'
@@ -62,7 +63,7 @@ class DBPlugin(BasePlugin):
             raise
 
         try:
-            self.mapper = WideMapper()  # ToDo: Mapper Factory
+            self.mapper = WideMapper(self)  # ToDo: Mapper Factory
         except Exception as e:
             print(e)
 
