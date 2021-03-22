@@ -1,4 +1,4 @@
-from datetime import date, datetime
+from datetime import date, datetime, time
 
 from sqlalchemy import create_engine
 
@@ -21,6 +21,7 @@ class SATypeMapper(BaseTypeMapper):
             int : sa.BigInteger,
             str : sa.VARCHAR,
             date : sa.DATE,
+            time : sa.TIME,
             datetime: sa.DATETIME,
         }
         self.map.update(map)
