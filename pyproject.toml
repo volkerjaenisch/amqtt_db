@@ -8,6 +8,7 @@ authors = ["volker <volker.jaenisch@inqbus.de>"]
 python = "^3.7"
 amqtt = "^0.10.0-alpha.1"
 SQLAlchemy = "^1.4.1"
+aiounittest = "^1.4.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"

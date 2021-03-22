@@ -1,4 +1,15 @@
 [[package]]
+name = "aiounittest"
+version = "1.4.0"
+description = "Test asyncio code more easily."
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+wrapt = "*"
+
+[[package]]
 name = "amqtt"
 version = "0.10.0a1"
 description = "MQTT client/broker using Python asyncio"
@@ -250,6 +261,14 @@ optional = false
 python-versions = ">=3.6.1"
 
 [[package]]
+name = "wrapt"
+version = "1.12.1"
+description = "Module for decorators, wrappers and monkey patching."
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "zipp"
 version = "3.4.1"
 description = "Backport of pathlib-compatible object wrapper for zip files"
@@ -264,9 +283,13 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=1.2.3)", "pytest-flake8", "pyt
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "188a4051dfd0884092d309ac80f67524607a08723a3aadf6a218a63843e0c4e7"
+content-hash = "64745b3a9dd81b289459c27806ea6ed527726b74ffa2e3eff07e8c590e0caa1e"
 
 [metadata.files]
+aiounittest = [
+    {file = "aiounittest-1.4.0-py3-none-any.whl", hash = "sha256:c47c5a87f5bba67ee7a0d593422083266db0800aea48705b768c4e3f51d9ed4a"},
+    {file = "aiounittest-1.4.0.tar.gz", hash = "sha256:5bd6b507a0df4f3497340fce3f6d41b8e558f5c0ad266efc7cebe5bc41c6211b"},
+]
 amqtt = [
     {file = "amqtt-0.10.0a1-py3-none-any.whl", hash = "sha256:dc26498de89f6c28bb4014acaa754b35953e8bf53a6efdafeb464e3e08c5815b"},
 ]
@@ -461,6 +484,9 @@ websockets = [
     {file = "websockets-8.1-cp38-cp38-win32.whl", hash = "sha256:e898a0863421650f0bebac8ba40840fc02258ef4714cb7e1fd76b6a6354bda36"},
     {file = "websockets-8.1-cp38-cp38-win_amd64.whl", hash = "sha256:f8a7bff6e8664afc4e6c28b983845c5bc14965030e3fb98789734d416af77c4b"},
     {file = "websockets-8.1.tar.gz", hash = "sha256:5c65d2da8c6bce0fca2528f69f44b2f977e06954c8512a952222cea50dad430f"},
+]
+wrapt = [
+    {file = "wrapt-1.12.1.tar.gz", hash = "sha256:b62ffa81fb85f4332a4f609cab4ac40709470da05643a082ec1eb88e6d9b97d7"},
 ]
 zipp = [
     {file = "zipp-3.4.1-py3-none-any.whl", hash = "sha256:51cb66cc54621609dd593d1787f286ee42a5c0adbb4b29abea5a63edc3e03098"},
