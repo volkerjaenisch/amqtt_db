@@ -23,7 +23,6 @@ class WideMapper(BaseMapper):
         data = json.loads(packet.payload.data)
         sender = list(data.keys())[0]
 
+        await self.parent.db.add_packet(session, sender, topic, data)
 
-
-        pass
-
+        print("package {} saved".format(packet))

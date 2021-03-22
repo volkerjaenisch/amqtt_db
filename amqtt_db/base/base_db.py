@@ -40,9 +40,7 @@ class BaseDB(object):
         Empties a table
         """
 
-    def insert(self, data, table):
+    def add_packet(self, session, sender, topic, data):
         """
-        Inserts data in a table
+        persist a packet
         """
-
-

@@ -6,13 +6,14 @@ class BasePlugin(Delegator):
     Plugin base class
     """
     DELEGATED_METHODS = {
-        'mapper' : ['on_save_session',
-                    'on_find_session',
-                    'on_del_session',
-                    'on_broker_post_shutdown',
-                    'on_save_session',
-                    'on_mqtt_packet_received',
-                    ]
+        'mapper': [
+            'on_save_session',
+            'on_find_session',
+            'on_del_session',
+            'on_broker_post_shutdown',
+            'on_save_session',
+            'on_mqtt_packet_received',
+            ]
     }
 
     config_path = 'plugins'   # dotted name path e.g 'plugins.timescaledb'
@@ -24,7 +25,7 @@ class BasePlugin(Delegator):
 
     def init_config(self, context):
         """
-        Use the config_path to derive the config portion of this plugin and store it under self.config.
+        Use the config_path to derive the config portion of this test_plugin and store it under self.config.
         :param context:
         :return:
         """
@@ -35,6 +36,5 @@ class BasePlugin(Delegator):
 
     def register_events(self):
         """
-        This method is called from the plugin manager to register the events
+        This method is called from the test_plugin manager to register the events
         """
-

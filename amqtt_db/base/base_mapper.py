@@ -3,14 +3,18 @@ import weakref
 
 class BaseMapper(object):
     """
-    API for the mqtt messages
+    API for the mqtt handlers
     """
 
     def __init__(self, parent):
-        self.parent = weakref.ref(parent)
+        self._parent = weakref.ref(parent)
+
+    @property
+    def parent(self):
+        return self._parent()
 
     @classmethod
-    def from_mapper_type(self, parent, mapper_type):
+    def from_mapper_type(cls, parent, _mapper_type):
         """
         Construct a mapper from mapper type
         """
@@ -39,4 +43,3 @@ class BaseMapper(object):
         """
         Shutdown the database if broker has shut down
         """
-

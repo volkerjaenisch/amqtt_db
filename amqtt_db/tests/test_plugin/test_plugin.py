@@ -9,7 +9,7 @@ from amqtt_db.tests.resources.mockups import context, publish_packet
 class TestPlugin(aiounittest.AsyncTestCase):
 
     def test_plugin(self):
-        plugin = DBPlugin(context)
+        _plugin = DBPlugin(context)
 
     async def test_on_packet(self):
         plugin = DBPlugin(context)

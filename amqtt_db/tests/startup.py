@@ -5,7 +5,6 @@ from hbmqtt.broker import Broker
 from hbmqtt.utils import read_yaml_config
 
 
-
 def main():
     formatter = "[%(asctime)s] :: %(levelname)s - %(message)s"
 

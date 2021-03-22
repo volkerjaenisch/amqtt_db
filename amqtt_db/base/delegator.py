@@ -8,6 +8,7 @@ class Delegator(object):
             if not isinstance(delegation_config, dict):
                 __raise_standard_exception()
 
+            delegate_object_str = ''
             for delegate_object_str, delegated_methods in delegation_config.items():
                 if called_method in delegated_methods:
                     break
@@ -19,4 +20,3 @@ class Delegator(object):
             return getattr(delegate_object, called_method)(*args, **kwargs)
 
         return wrapper
-

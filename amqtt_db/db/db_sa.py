@@ -16,15 +16,15 @@ class SATypeMapper(BaseTypeMapper):
 
     def __init__(self):
         super(SATypeMapper, self).__init__()
-        map = {
+        _map = {
             float: sa.FLOAT,
-            int : sa.BigInteger,
-            str : sa.VARCHAR,
-            date : sa.DATE,
-            time : sa.TIME,
+            int: sa.BigInteger,
+            str: sa.VARCHAR,
+            date: sa.DATE,
+            time: sa.TIME,
             datetime: sa.DATETIME,
         }
-        self.map.update(map)
+        self.map.update(_map)
 
 
 class SA(BaseDB):
@@ -32,6 +32,7 @@ class SA(BaseDB):
     SQLAlchemy storage
     """
     engine = None
+    type_mapper = None
 
     def init_db(self, connect_string):
         """
@@ -40,7 +41,7 @@ class SA(BaseDB):
         self.engine = create_engine(connect_string)
         self.type_mapper = SATypeMapper()
 
-    def create_table(self, name, column_def=None):
+    async def create_table(self, name, column_def=None):
         """
         Dynamically create a table from a column definition
         :param name: Table name
@@ -49,11 +50,9 @@ class SA(BaseDB):
         if column_def is None:
             return
 
-        assert isinstance(column_def, dict)
-
         table_description = {
-            '__tablename__':name,
-            'id' : sa.Column(sa.BigInteger, primary_key=True, autoincrement=True)
+            '__tablename__': name,
+            'id': sa.Column(sa.BigInteger, primary_key=True, autoincrement=True)
         }
 
         for col_name, col_type in column_def.items():
@@ -63,3 +62,5 @@ class SA(BaseDB):
         _table = type(name, (Base,), table_description)
         Base.metadata.create_all(self.engine, tables=[Base.metadata.tables[name]])
 
+    async def add_packet(self, session, sender, topic, data):
+        pass
