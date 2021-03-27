@@ -30,5 +30,9 @@ amqtt_db expects that the decoding, deserializing, transformations, target DB, t
 etc. are all well in place if it deals with a single incoming packet.
 If the handling of that package fails, exceptions will be raised, and the error handling rushes in to deal with the problem.
 
-Since the change rate on the decoding, deserializing, database model is quite low this optimistic will be quite performant. 
+Since the change rate on the decoding, deserializing, database model is quite low this optimistic approach will be quite performant. 
 
+Details
+-------
+
+Please have a look at [payload handling](./payload_handling.md)
