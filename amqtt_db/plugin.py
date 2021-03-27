@@ -42,7 +42,6 @@ class DBPlugin(BasePlugin):
 
         try:
             self.db = SA(self, connect_string)
-            self.db.parent = weakref.ref(self)
         except Exception as e:
             msg = 'Connection to DB with connect string {} failed with error {}'
             self.context.logger.error(msg.format(connect_string, e))

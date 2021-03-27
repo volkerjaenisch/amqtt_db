@@ -12,17 +12,18 @@ class WideMapper(BaseMapper):
         Persist the session
         :param session: The current session
         """
-        print("saving session {}".format(session))
+        self.logger.debug("saving session {}".format(session))
 
     async def on_mqtt_packet_received(self, packet=None, session=None):
         if not isinstance(packet, PublishPacket):
             return
 
-        print("saving package {}".format(packet))
+        self.logger.debug("saving package {}".format(packet))
         topic = packet.topic_name
-        data = json.loads(packet.payload.data)
-        sender = list(data.keys())[0]
+        raw_data = json.loads(packet.payload.data)
+        sender = list(raw_data.keys())[0]  # ToDo eliminate this waste of time
+        data = raw_data[sender]
 
         await self.parent.db.add_packet(session, sender, topic, data)
 
-        print("package {} saved".format(packet))
+        self.logger.debug("package {} saved".format(packet))

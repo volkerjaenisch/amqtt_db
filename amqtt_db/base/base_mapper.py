@@ -8,6 +8,7 @@ class BaseMapper(object):
 
     def __init__(self, parent):
         self._parent = weakref.ref(parent)
+        self.logger = self.parent.context.logger
 
     @property
     def parent(self):

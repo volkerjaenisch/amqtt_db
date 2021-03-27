@@ -62,5 +62,22 @@ class SA(BaseDB):
         _table = type(name, (Base,), table_description)
         Base.metadata.create_all(self.engine, tables=[Base.metadata.tables[name]])
 
+    def get_column_def(self, data):
+        for col_name, col_data in data.items():
+            pass
+
+    def create_topic_table(self, session, sender, topic, data):
+        self.logger.debug('Building new table for topic {}'.format(topic))
+        column_def = self.get_column_def(data)
+
+
     async def add_packet(self, session, sender, topic, data):
+        try:
+            topic_db_cls = Base.metadata.tables[topic]
+        except KeyError:
+            self.create_topic_table(session, sender, topic, data)
+            topic_db_cls = Base.metadata.tables[topic]
+
+        topic = topic_db_cls(data[sender])
+
         pass
