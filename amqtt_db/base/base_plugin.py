@@ -1,3 +1,5 @@
+from amqtt_db.base.constants import ON_SAVE_SESSION, ON_FIND_SESSION, ON_DEL_SESSION, ON_BROKER_POST_SHUTDOWN, \
+    ON_MQTT_PACKET_RECEIVED, BASE_CONFIG_PATH
 from amqtt_db.base.delegator import Delegator
 
 
@@ -7,16 +9,15 @@ class BasePlugin(Delegator):
     """
     DELEGATED_METHODS = {
         'mapper': [
-            'on_save_session',
-            'on_find_session',
-            'on_del_session',
-            'on_broker_post_shutdown',
-            'on_save_session',
-            'on_mqtt_packet_received',
+            ON_SAVE_SESSION,
+            ON_FIND_SESSION,
+            ON_DEL_SESSION,
+            ON_BROKER_POST_SHUTDOWN,
+            ON_MQTT_PACKET_RECEIVED,
             ]
     }
 
-    config_path = 'plugins'   # dotted name path e.g 'plugins.timescaledb'
+    config_path = BASE_CONFIG_PATH   # dotted name path e.g 'plugins.timescaledb'
     config = None
 
     def __init__(self, context):

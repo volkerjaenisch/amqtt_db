@@ -19,10 +19,10 @@ class WideMapper(BaseMapper):
             return
 
         self.logger.debug("saving package {}".format(packet))
-        topic = packet.topic_name
-        raw_data = json.loads(packet.payload.data)
-        sender = list(raw_data.keys())[0]  # ToDo eliminate this waste of time
-        data = raw_data[sender]
+        handler = self.parent.topic_engine.topic2handler(packet.topic_name)
+
+        decoded_payload = handler[0].decode()
+
 
         await self.parent.db.add_packet(session, sender, topic, data)
 
