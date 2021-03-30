@@ -1,5 +1,3 @@
-import json
-
 from hbmqtt.mqtt import PublishPacket
 
 from amqtt_db.base.base_mapper import BaseMapper
@@ -21,8 +19,9 @@ class WideMapper(BaseMapper):
         self.logger.debug("saving package {}".format(packet))
         handler = self.parent.topic_engine.topic2handler(packet.topic_name)
 
-        decoded_payload = handler[0].decode()
+        decoded_payload = handler[0].decode(packet.payload.data)
 
+        # ToDo : Here type enrichment
 
         await self.parent.db.add_packet(session, sender, topic, data)
 

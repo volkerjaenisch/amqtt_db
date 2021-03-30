@@ -1,5 +1,4 @@
 import inspect
-import weakref
 
 from amqtt_db.base.base_plugin import BasePlugin
 from amqtt_db.base.base_topic import BaseTopicEngine
@@ -13,7 +12,7 @@ class DBPlugin(BasePlugin):
     The DB Plugin
     """
 
-    config_path = 'amqtt_db'
+    config_path = 'plugins.amqtt_db'
     db = None
     mapper = None
     topic_engine = None

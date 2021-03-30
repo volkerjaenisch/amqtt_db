@@ -30,10 +30,18 @@ class BasePlugin(Delegator):
         :param context:
         :return:
         """
-        temp_config = context.config
-        for path_part in self.config_path.split('.'):
-            temp_config = temp_config[path_part]
-        self.config = temp_config
+        try:
+            temp_config = context.config
+            path_parts = self.config_path.split('.')
+            for path_part in path_parts[:-1]:
+                temp_config = temp_config[path_part]
+            if path_parts[-1] in temp_config:
+                self.config = context.config[path_parts[-1]]
+        except KeyError as e:
+            self.context.logger.error('amqtt_db: Plugin config not found under "{}" in the config file '.format(self.config_path))
+            raise ImportError(e)
+
+
 
     def register_events(self):
         """

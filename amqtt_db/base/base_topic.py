@@ -5,7 +5,7 @@ import re
 
 from amqtt_db.base.constants import PAYLOAD_CONFIG
 from amqtt_db.base.errors import TopicNotFound
-from amqtt_db.base.utils import invoke_class_by_name
+from amqtt_db.base.utils import get_class_by_name
 
 
 class BaseTopicEngine(object):
@@ -29,9 +29,10 @@ class BaseTopicEngine(object):
             decoder_cls_name = entry[0]
             type_structure = entry[1]
             type_structure_cls_name = list(type_structure.keys())[0]
-            self.decoders[decoder_cls_name] = invoke_class_by_name(decoder_cls_name)
+            decoder_class = get_class_by_name(decoder_cls_name)
+            self.decoders[decoder_cls_name] = decoder_class
 
-            self.topic_handlers[key] = [decoder_cls_name(), type_structure]
+            self.topic_handlers[key] = [decoder_class(), type_structure]
             self.topic_re[re.compile(key)] = self.topic_handlers[key]
 
 
