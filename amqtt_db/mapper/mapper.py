@@ -17,12 +17,13 @@ class WideMapper(BaseMapper):
             return
 
         self.logger.debug("saving package {}".format(packet))
-        handler = self.parent.topic_engine.topic2handler(packet.topic_name)
+        decoder, deserializer = self.parent.topic_engine.topic2handler(packet.topic_name)
+        topic = packet.topic_name
 
-        decoded_payload = handler[0].decode(packet.payload.data)
+        decoded_payload = decoder.decode(packet.payload.data)
 
-        # ToDo : Here type enrichment
-
-        await self.parent.db.add_packet(session, sender, topic, data)
+        sender, data = list(decoded_payload.items())[0]
+        typed_data = deserializer.deserialize(data)
+        await self.parent.db.add_packet(session, sender, topic, typed_data)
 
         self.logger.debug("package {} saved".format(packet))

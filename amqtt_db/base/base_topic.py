@@ -14,6 +14,7 @@ class BaseTopicEngine(object):
         self.parent = parent
         self.topic_handlers = {}    # topic to handler mapping
         self.decoders = {}
+        self.deserializers = {}
         self.topic_re = {}    # topic to handler mapping
         self.read_config(parent.config)
 
@@ -27,12 +28,24 @@ class BaseTopicEngine(object):
         for key, value in payload_config.items():
             entry = list(value.items())[0]
             decoder_cls_name = entry[0]
-            type_structure = entry[1]
-            type_structure_cls_name = list(type_structure.keys())[0]
             decoder_class = get_class_by_name(decoder_cls_name)
-            self.decoders[decoder_cls_name] = decoder_class
+            if decoder_cls_name in self.decoders:
+                decoder = self.decoders[decoder_cls_name]
+            else:
+                decoder = decoder_class()
+                self.decoders[decoder_cls_name] = decoder 
+                
+            deserialier_config = entry[1]
+            deserializer_cls_name, types = list(deserialier_config.items())[0]
+            deserializer_class = get_class_by_name(deserializer_cls_name)
+            
+            if deserializer_cls_name in self.deserializers:
+                deserializer = self.deserializers[deserializer_cls_name]
+            else:
+                deserializer = deserializer_class(types)
+                self.deserializers[deserializer_cls_name] = deserializer 
 
-            self.topic_handlers[key] = [decoder_class(), type_structure]
+            self.topic_handlers[key] = [decoder, deserializer]
             self.topic_re[re.compile(key)] = self.topic_handlers[key]
 
 

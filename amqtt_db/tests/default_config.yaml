@@ -22,9 +22,9 @@ amqtt_db:
   payload :
     tinkershop/trh :
       amqtt_db.payload.json_decoder.JSONDecoder :
-        FlatDeserializer :
+        amqtt_db.payload.flat_deserializer.FlatDeserializer :
           temp : float
           rh : float
           press : float
           gas : float
-          'current time' : datetime.datetime
+          'current time' : datetime.datetime.fromtimestamp
