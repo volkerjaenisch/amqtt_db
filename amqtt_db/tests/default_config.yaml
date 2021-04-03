@@ -27,4 +27,4 @@ amqtt_db:
           rh : float
           press : float
           gas : float
-          'current time' : datetime.datetime.fromtimestamp
+          'current time' : datetime.datetime.utcfromtimestamp

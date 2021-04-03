@@ -1,6 +1,7 @@
 from datetime import date, datetime, time
 
 from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 
 from amqtt_db.base.base_db import BaseDB
 
@@ -20,9 +21,9 @@ class SATypeMapper(BaseTypeMapper):
             float: sa.FLOAT,
             int: sa.BigInteger,
             str: sa.VARCHAR,
-            date: sa.DATE,
-            time: sa.TIME,
-            datetime: sa.DATETIME,
+            date: sa.types.DATE,
+            time: sa.types.TIME,
+            datetime: sa.types.DateTime,
         }
         self.map.update(_map)
 
@@ -33,12 +34,16 @@ class SA(BaseDB):
     """
     engine = None
     type_mapper = None
+    autocommit = None
+    session = None
 
-    def init_db(self, connect_string):
+    def init_db(self, connect_string, autocommit=None):
         """
         Initialize the DB
         """
+        self.autocommit = autocommit
         self.engine = create_engine(connect_string)
+        self.session = sessionmaker(bind=self.engine, autocommit=self.autocommit)()
         self.type_mapper = SATypeMapper()
 
     async def create_table(self, name, column_def=None):
@@ -63,21 +68,25 @@ class SA(BaseDB):
         Base.metadata.create_all(self.engine, tables=[Base.metadata.tables[name]])
 
     def get_column_def(self, data):
+        result = {}
         for col_name, col_data in data.items():
-            pass
+            result[col_name] = type(col_data)
+        return result
 
-    def create_topic_table(self, session, sender, topic, data):
+    async def create_topic_table(self, session, sender, topic, data):
         self.logger.debug('Building new table for topic {}'.format(topic))
         column_def = self.get_column_def(data)
-
+        await self.create_table(topic, column_def)
 
     async def add_packet(self, session, sender, topic, data):
         try:
-            topic_db_cls = Base.metadata.tables[topic]
+            topic_table = Base.metadata.tables[topic]
         except KeyError:
-            self.create_topic_table(session, sender, topic, data)
-            topic_db_cls = Base.metadata.tables[topic]
+            await self.create_topic_table(session, sender, topic, data)
+            topic_table = Base.metadata.tables[topic]
 
-        topic = topic_db_cls(data[sender])
+        topic_cls = topic_table.decl_class
+        topic = topic_cls(**data)
 
-        pass
+        self.session.add(topic)
+        self.session.commit()

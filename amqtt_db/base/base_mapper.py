@@ -10,6 +10,14 @@ class BaseMapper(object):
         self._parent = weakref.ref(parent)
         self.logger = self.parent.context.logger
 
+    def topic2SQL(self, topic):
+        """
+        Generic way to generate a table name from MQTT topic
+        :param topic: MQTT topic
+        :return: SQL confirm table name
+        """
+        return topic
+
     @property
     def parent(self):
         return self._parent()
