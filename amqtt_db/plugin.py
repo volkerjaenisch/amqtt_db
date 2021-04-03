@@ -1,4 +1,6 @@
 import inspect
+import sys
+import traceback
 
 from amqtt_db.base.base_plugin import BasePlugin
 from amqtt_db.base.base_topic import BaseTopicEngine
@@ -21,13 +23,21 @@ class DBPlugin(BasePlugin):
         super(DBPlugin, self).__init__(context)
         self.compose()
 
+    def handle_exception(self, e):
+        msg = "amqtt_db ERROR: {}".format(e)
+        self.context.logger.error(msg)
+        exc_type, exc_value, exc_traceback = sys.exc_info()
+        for line in traceback.format_tb(exc_traceback):
+            self.context.logger.error(line[:-1])
+        raise ImportError
+
     def compose(self):
         """
         Constructs the plugin by choosing the mapper and the DB interface according to the config
         """
         self.get_topic_engine()
-        self.get_mapper()
         self.get_db()
+        self.get_mapper()
         self.register_events()
 
     def get_topic_engine(self):
@@ -41,9 +51,9 @@ class DBPlugin(BasePlugin):
 
         try:
             self.topic_engine = topic_engine(self)
-        except KeyError:
+        except KeyError as e:
             self.context.logger.error('No topic engine could be started {}'.format(topic_engine))
-            raise
+            self.handle_exception(e)
 
 
     def get_db(self):
@@ -55,15 +65,15 @@ class DBPlugin(BasePlugin):
 
         try:
             connect_string = self.config[DB_CONNECT_STRING]
-        except KeyError:
+        except KeyError as e:
             self.context.logger.error('No "db_connection" found in config file at {}'.format(self.config_path))
-            raise
+            self.handle_exception(e)
 
         try:
-            self.db = SA(self, connect_string)
+            self.db = SA(self.context, connect_string)
         except Exception as e:
             msg = 'Connection to DB with connect string {} failed with error {}'
-            self.context.logger.error(msg.format(connect_string, e))
+            self.handle_exception(e)
 
     def get_mapper(self):
         """
@@ -73,15 +83,14 @@ class DBPlugin(BasePlugin):
             raise
         try:
             _mapper_type = self.config[DB_MAPPER]
-        except KeyError:
+        except KeyError as e:
             self.context.logger.error('No "DB mapper" found in config file at {}'.format(self.config_path))
-            raise
+            self.handle_exception(e)
 
         try:
-            self.mapper = WideMapper(self)  # ToDo: Mapper Factory
+            self.mapper = WideMapper(self.topic_engine, self.db, self.context)  # ToDo: Mapper Factory
         except Exception as e:
-            print(e)
-
+            self.handle_exception(e)
 
     def register_events(self):
         events = {}

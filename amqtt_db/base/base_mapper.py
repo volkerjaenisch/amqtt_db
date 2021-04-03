@@ -6,9 +6,24 @@ class BaseMapper(object):
     API for the mqtt handlers
     """
 
-    def __init__(self, parent):
-        self._parent = weakref.ref(parent)
-        self.logger = self.parent.context.logger
+    def __init__(self, topic_engine, db, context):
+        self._topic_engine = weakref.ref(topic_engine)
+        self._context = weakref.ref(context)
+        self._db = weakref.ref(db)
+        self.logger = self.context.logger
+
+    @property
+    def db(self):
+        return self._db()
+
+    @property
+    def context(self):
+        return self._context()
+
+    @property
+    def topic_engine(self):
+        return self._topic_engine()
+
 
     def topic2SQL(self, topic):
         """
@@ -18,16 +33,12 @@ class BaseMapper(object):
         """
         return topic
 
-    @property
-    def parent(self):
-        return self._parent()
-
-    @classmethod
-    def from_mapper_type(cls, parent, _mapper_type):
-        """
-        Construct a mapper from mapper type
-        """
-        return BaseMapper(parent)  # ToDo: Factory of mappers
+    # @classmethod
+    # def from_mapper_type(cls, parent, _mapper_type):
+    #     """
+    #     Construct a mapper from mapper type
+    #     """
+    #     return BaseMapper(parent)  # ToDo: Factory of mappers
 
     async def on_save_session(self, session):
         """

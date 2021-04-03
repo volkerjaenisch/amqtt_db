@@ -5,6 +5,9 @@ from hbmqtt.broker import BrokerContext
 from hbmqtt.mqtt import PublishPacket
 from hbmqtt.mqtt.publish import PublishPayload, PublishVariableHeader
 
+import logging
+
+
 context = MagicMock(spec=BrokerContext)()
 context.config = {
     'amqtt_db': {
@@ -12,6 +15,10 @@ context.config = {
         'connect': 'sqlite:///tests.sqlite'
     }
 }
+context.logger = logging.getLogger('test')
+
+context = MagicMock(spec=BrokerContext)()
+
 
 
 publish_packet = PublishPacket()
