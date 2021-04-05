@@ -2,5 +2,11 @@
 
 class TopicNotFound(Exception):
     """
-    Raised is a topic is not found
+    Raised if a topic is not found
+    """
+
+
+class TypeNotFound(Exception):
+    """
+    Raised if a type is not found
     """

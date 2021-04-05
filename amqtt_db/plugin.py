@@ -24,7 +24,7 @@ class DBPlugin(BasePlugin):
         self.compose()
 
     def handle_exception(self, e):
-        msg = "amqtt_db ERROR: {}".format(e)
+        msg = "amqtt_db ERROR: {}".format(e.__repr__())
         self.context.logger.error(msg)
         exc_type, exc_value, exc_traceback = sys.exc_info()
         for line in traceback.format_tb(exc_traceback):
@@ -51,8 +51,8 @@ class DBPlugin(BasePlugin):
 
         try:
             self.topic_engine = topic_engine(self)
-        except KeyError as e:
-            self.context.logger.error('No topic engine could be started {}'.format(topic_engine))
+        except Exception as e:
+            self.context.logger.error('No topic engine could be started')
             self.handle_exception(e)
 
 
@@ -66,25 +66,24 @@ class DBPlugin(BasePlugin):
         try:
             connect_string = self.config[DB_CONNECT_STRING]
         except KeyError as e:
-            self.context.logger.error('No "db_connection" found in config file at {}'.format(self.config_path))
+            self.context.logger.error('No "db_connection" found in config file at: "{}"'.format(self.config_path))
             self.handle_exception(e)
 
         try:
             self.db = SA(self.context, connect_string)
         except Exception as e:
-            msg = 'Connection to DB with connect string {} failed with error {}'
+            msg = 'Connection to DB with connect string: "{}" failed'.format(connect_string)
+            self.context.logger.error(msg)
             self.handle_exception(e)
 
     def get_mapper(self):
         """
         Gets the mapper according to the config
         """
-        if DB_MAPPER not in self.config:
-            raise
         try:
             _mapper_type = self.config[DB_MAPPER]
         except KeyError as e:
-            self.context.logger.error('No "DB mapper" found in config file at {}'.format(self.config_path))
+            self.context.logger.error('Cannot read/find "db_mapper" entry in config file part "{}"'.format(self.config_path))
             self.handle_exception(e)
 
         try:

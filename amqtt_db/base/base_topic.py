@@ -23,7 +23,6 @@ class BaseTopicEngine(object):
         Build a simple parse tree out of the payload config
         :param config: The payload config
         """
-
         payload_config = config[PAYLOAD_CONFIG]
         for key, value in payload_config.items():
             entry = list(value.items())[0]
@@ -47,8 +46,6 @@ class BaseTopicEngine(object):
 
             self.topic_handlers[key] = [decoder, deserializer]
             self.topic_re[re.compile(key)] = self.topic_handlers[key]
-
-
 
     def topic2handler(self, topic):
         """
