@@ -24,7 +24,6 @@ class BaseMapper(object):
     def topic_engine(self):
         return self._topic_engine()
 
-
     def topic2SQL(self, topic):
         """
         Generic way to generate a table name from MQTT topic

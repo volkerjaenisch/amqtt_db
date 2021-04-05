@@ -5,7 +5,6 @@ Base deserializer class. The deserializer unpacks the payload and maps it to DB 
 
 class BaseDeserializer(object):
 
-
     def deserialize(self, data):
         """
         Map the data in data to types. This is done according to the given structure for this particular

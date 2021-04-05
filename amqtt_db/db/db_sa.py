@@ -7,7 +7,7 @@ from amqtt_db.base.base_db import BaseDB
 
 import sqlalchemy as sa
 
-
+from amqtt_db.base.errors import NoSAMappingForType
 from amqtt_db.base.type_mapper import BaseTypeMapper
 from amqtt_db.db.base import Base
 
@@ -32,10 +32,11 @@ class SA(BaseDB):
     """
     SQLAlchemy storage
     """
-    engine = None
-    type_mapper = None
     autocommit = None
+    connect_string = None
+    engine = None
     session = None
+    type_mapper = None
 
     def init_db(self, connect_string, autocommit=False, echo=False):
         """
@@ -65,9 +66,8 @@ class SA(BaseDB):
         for col_name, col_type in column_def.items():
             try:
                 sa_col_type = self.type_mapper.map[col_type]
-            except KeyError as e:
-                self.logger.error('amqtt_db: Type {} cannot be converted'.format(col_type))
-                raise
+            except KeyError:
+                raise NoSAMappingForType('Python type "{}" has no SA mapping defined'.format(col_type))
             table_description[col_name] = sa.Column(sa_col_type)
 
         _table = type(name, (Base,), table_description)
@@ -105,6 +105,6 @@ class SA(BaseDB):
 
         query = self.session.query(topic_cls)
         for col_name, value in data.items():
-            query = query.filter(getattr(topic_cls,col_name) == value)
+            query = query.filter(getattr(topic_cls, col_name) == value)
 
         return query

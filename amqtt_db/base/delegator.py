@@ -1,3 +1,9 @@
+"""
+Shamelessly stolen from
+https://www.michaelcho.me/article/method-delegation-in-python
+"""
+
+
 class Delegator(object):
     def __getattr__(self, called_method):
         def __raise_standard_exception():

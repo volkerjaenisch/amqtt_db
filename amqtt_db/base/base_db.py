@@ -7,7 +7,7 @@ class BaseDB(object):
     """
 
     def __init__(self, context, connect_string, **kwargs):
-        self._context =  weakref.ref(context)
+        self._context = weakref.ref(context)
         self.logger = self.context.logger
         self.init_db(connect_string, **kwargs)
 
@@ -15,7 +15,7 @@ class BaseDB(object):
     def context(self):
         return self._context()
 
-    def init_db(self, connect_string):
+    def init_db(self, connect_string, **kwargs):
         """
         Initialize the DB
         """

@@ -74,6 +74,3 @@ class BaseTopicEngine(object):
                 return self.topic_handlers[regex]
 
         return None
-
-
-

@@ -4,7 +4,6 @@ from amqtt_db.base.errors import TopicNotFound
 
 class TopicEngine(BaseTopicEngine):
 
-
     def topic2handler(self, topic):
         """
         Get a handler for a topic according to the payload definitions

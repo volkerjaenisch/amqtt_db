@@ -55,7 +55,6 @@ class DBPlugin(BasePlugin):
             self.context.logger.error('No topic engine could be started')
             self.handle_exception(e)
 
-
     def get_db(self):
         """
         Gets the DB according to the config
@@ -83,7 +82,8 @@ class DBPlugin(BasePlugin):
         try:
             _mapper_type = self.config[DB_MAPPER]
         except KeyError as e:
-            self.context.logger.error('Cannot read/find "db_mapper" entry in config file part "{}"'.format(self.config_path))
+            msg = 'Cannot read/find "db_mapper" entry in config file part "{}"'.format(self.config_path)
+            self.context.logger.error(msg)
             self.handle_exception(e)
 
         try:

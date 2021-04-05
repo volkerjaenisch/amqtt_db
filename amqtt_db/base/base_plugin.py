@@ -41,10 +41,9 @@ class BasePlugin(Delegator):
                 raise ImportError()
 
         except KeyError as e:
-            self.context.logger.error('amqtt_db: Plugin config not found under "{}" in the config file '.format(self.config_path))
+            msg = 'amqtt_db: Plugin config not found under "{}" in the config file '.format(self.config_path)
+            self.context.logger.error(msg)
             raise ImportError(e)
-
-
 
     def register_events(self):
         """
