@@ -18,6 +18,7 @@ topic-check:
 amqtt_db:
   db_mapper : wide
   db_connection : 'postgresql://root:sas242@192.168.178.25/iot'
+#  db_connection : 'sqlite:///test_topic.sqlite'
 
   payload :
     tinkershop/trh :

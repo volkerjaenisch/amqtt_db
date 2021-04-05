@@ -6,10 +6,14 @@ class BaseDB(object):
     Base API to the data base
     """
 
-    def __init__(self, context, connect_string):
-        self.context =  weakref.ref(context)
-        self.logger = self.context().logger
-        self.init_db(connect_string)
+    def __init__(self, context, connect_string, **kwargs):
+        self._context =  weakref.ref(context)
+        self.logger = self.context.logger
+        self.init_db(connect_string, **kwargs)
+
+    @property
+    def context(self):
+        return self._context()
 
     def init_db(self, connect_string):
         """

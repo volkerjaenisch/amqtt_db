@@ -25,6 +25,6 @@ class WideMapper(BaseMapper):
         sender, data = list(decoded_payload.items())[0]
         typed_data = deserializer.deserialize(data)
         typed_data['sender'] = int(sender, 16)
-        await self.db.add_packet(session, sender, self.topic2SQL(topic), typed_data)
+        self.db.add_packet(session, sender, self.topic2SQL(topic), typed_data)
 
         self.logger.debug("package {} saved".format(packet))

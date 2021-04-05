@@ -21,8 +21,8 @@ class SATypeMapper(BaseTypeMapper):
             float: sa.FLOAT,
             int: sa.BigInteger,
             str: sa.VARCHAR,
-            date: sa.types.DATE,
-            time: sa.types.TIME,
+            date: sa.types.Date,
+            time: sa.types.Time,
             datetime: sa.types.DateTime,
         }
         self.map.update(_map)
@@ -37,16 +37,17 @@ class SA(BaseDB):
     autocommit = None
     session = None
 
-    def init_db(self, connect_string, autocommit=None):
+    def init_db(self, connect_string, autocommit=False, echo=False):
         """
         Initialize the DB
         """
         self.autocommit = autocommit
-        self.engine = create_engine(connect_string)
+        self.connect_string = connect_string
+        self.engine = create_engine(connect_string, echo=echo)
         self.session = sessionmaker(bind=self.engine, autocommit=self.autocommit)()
         self.type_mapper = SATypeMapper()
 
-    async def create_table(self, name, column_def=None):
+    def create_table(self, name, column_def=None):
         """
         Dynamically create a table from a column definition
         :param name: Table name
@@ -57,11 +58,16 @@ class SA(BaseDB):
 
         table_description = {
             '__tablename__': name,
-            'id': sa.Column(sa.BigInteger, primary_key=True, autoincrement=True)
+            'id': sa.Column(sa.BigInteger().with_variant(sa.Integer, "sqlite"), primary_key=True),
+            'sqlite_autoincrement': True,
         }
 
         for col_name, col_type in column_def.items():
-            sa_col_type = self.type_mapper.map[col_type]
+            try:
+                sa_col_type = self.type_mapper.map[col_type]
+            except KeyError as e:
+                self.logger.error('amqtt_db: Type {} cannot be converted'.format(col_type))
+                raise
             table_description[col_name] = sa.Column(sa_col_type)
 
         _table = type(name, (Base,), table_description)
@@ -73,20 +79,32 @@ class SA(BaseDB):
             result[col_name] = type(col_data)
         return result
 
-    async def create_topic_table(self, session, sender, topic, data):
+    def create_topic_table(self, topic, data):
         self.logger.debug('Building new table for topic {}'.format(topic))
         column_def = self.get_column_def(data)
-        await self.create_table(topic, column_def)
+        self.create_table(topic, column_def)
 
-    async def add_packet(self, session, sender, topic, data):
+    def get_topic_cls(self, topic, data):
         try:
             topic_table = Base.metadata.tables[topic]
         except KeyError:
-            await self.create_topic_table(session, sender, topic, data)
+            self.create_topic_table(topic, data)
             topic_table = Base.metadata.tables[topic]
 
-        topic_cls = topic_table.decl_class
-        topic = topic_cls(**data)
+        return topic_table.decl_class
 
-        self.session.add(topic)
+    def add_packet(self, session, sender, topic, data):
+        topic_cls = self.get_topic_cls(topic, data)
+        topic_line = topic_cls(**data)
+
+        self.session.add(topic_line)
         self.session.commit()
+
+    def query_topic(self, topic, data):
+        topic_cls = self.get_topic_cls(topic, data)
+
+        query = self.session.query(topic_cls)
+        for col_name, value in data.items():
+            query = query.filter(getattr(topic_cls,col_name) == value)
+
+        return query

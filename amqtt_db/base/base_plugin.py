@@ -37,6 +37,9 @@ class BasePlugin(Delegator):
                 temp_config = temp_config[path_part]
             if path_parts[-1] in temp_config:
                 self.config = context.config[path_parts[-1]]
+            else:
+                raise ImportError()
+
         except KeyError as e:
             self.context.logger.error('amqtt_db: Plugin config not found under "{}" in the config file '.format(self.config_path))
             raise ImportError(e)

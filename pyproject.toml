@@ -10,6 +10,7 @@ amqtt = "^0.10.0-alpha.1"
 SQLAlchemy = "^1.4.1"
 aiounittest = "^1.4.0"
 psycopg2 = "^2.8.6"
+PyYAML = "^5.4.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"

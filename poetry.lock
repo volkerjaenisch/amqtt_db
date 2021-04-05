@@ -291,7 +291,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=1.2.3)", "pytest-flake8", "pyt
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "9d657e2eb3b9ac9cc7bce4605d82e468f0cbfe7e940cd97bb404cd295ae3e7b7"
+content-hash = "b265a3347ea1623e90ac7e3721c041cd562c6abbf2392463ec05ecf032ca1f90"
 
 [metadata.files]
 aiounittest = [
