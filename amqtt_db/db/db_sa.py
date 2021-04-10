@@ -47,7 +47,6 @@ class SA(BaseDB):
         self.autocommit = autocommit
         self.connect_string = connect_string
         self.engine = create_engine(connect_string, echo=echo)
-
         self.session = sessionmaker(bind=self.engine, autocommit=self.autocommit)()
         self.type_mapper = SATypeMapper()
 
@@ -91,7 +90,7 @@ class SA(BaseDB):
         if len(new_cols) == 0:
             return
         # We need new columns, add them
-        self.add_new_colums(topic_cls, new_cols)
+        self.add_new_columns(topic_cls, new_cols)
 
     def find_new_colums(self, topic_cls, data):
         """
@@ -109,7 +108,7 @@ class SA(BaseDB):
                 new_columns[col_name] = self.type_mapper.map[col_type]
         return new_columns
 
-    def add_new_colums(self, topic_cls, column_def):
+    def add_new_columns(self, topic_cls, column_def):
         """
         This is a bit of a hack since SQLAlchemy does not come with an out of the box solution
         for such a volatile DB usage we need. SQLAlchemy is mostly used for quite static DB schema where migrations

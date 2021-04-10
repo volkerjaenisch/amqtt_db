@@ -9,7 +9,11 @@ def main():
     formatter = "[%(asctime)s] :: %(levelname)s - %(message)s"
 
     logging.basicConfig(level=logging.DEBUG, format=formatter)
-    config = read_yaml_config('default_config.yaml')
+
+    try:
+        config = read_yaml_config('config.yaml')
+    except FileNotFoundError:
+        config = read_yaml_config('default_config.yaml')
 
     loop = asyncio.get_event_loop()
     broker = Broker(config)
