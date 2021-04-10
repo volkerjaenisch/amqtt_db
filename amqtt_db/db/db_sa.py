@@ -51,21 +51,19 @@ class SA(BaseDB):
         self.session = sessionmaker(bind=self.engine, autocommit=self.autocommit)()
         self.type_mapper = SATypeMapper()
 
-    def create_table(self, name, column_def=None):
+    def create_table(self, name, column_def):
         """
         Dynamically create a table from a column definition
         :param name: Table name
         :param column_def: Column definition, dict like
         """
-        if column_def is None:
-            return
-
+        # The blueprint of the table
         table_description = {
             '__tablename__': name,
             'id': sa.Column(sa.BigInteger().with_variant(sa.Integer, "sqlite"), primary_key=True),
             'sqlite_autoincrement': True,
         }
-
+        # The columns from the column_def are converted to SA Types and added to the blueprint
         for col_name, col_type in column_def.items():
             try:
                 sa_col_type = self.type_mapper.map[col_type]
@@ -73,17 +71,36 @@ class SA(BaseDB):
                 raise NoSAMappingForType('Python type "{}" has no SA mapping defined'.format(col_type))
             table_description[col_name] = sa.Column(sa_col_type)
 
+        # Construct the Table from the blueprint
         _table = type(name, (Base,), table_description)
+        # Create the table in the DB
         Base.metadata.create_all(self.engine, tables=[Base.metadata.tables[name]])
+        # Add the table to the metadata
         Base.metadata._add_table(name, None, Base.metadata.tables[name])
 
     def handle_new_columns(self, topic_cls, data):
+        """
+        Handle new columns.
+        :param topic_cls: The topic decl class
+        :param data: The data from the payload
+        :return:
+        """
+        # Check if we really need additional columns
         new_cols = self.find_new_colums(topic_cls, data)
+        # No new columns we return
         if len(new_cols) == 0:
             return
+        # We need new columns, add them
         self.add_new_colums(topic_cls, new_cols)
 
     def find_new_colums(self, topic_cls, data):
+        """
+        This is good place to do some heuristics to check if really new columns should be made.
+        :param topic_cls: The topic decl class
+        :param data: The data from the payload
+        :return: List of new columns if any
+        """
+
         new_columns = {}
         existing_columns = topic_cls.__mapper__.columns
         for col_name, value in data.items():
@@ -128,31 +145,56 @@ class SA(BaseDB):
         # At last we add the new topic table to the metadata.
         Base.metadata._add_table(table_name, None, new_table)
 
-
     def get_column_def(self, data):
+        """
+        Get a cloumn definition from data.
+        :param data: Data from the payload
+        :return: Column definition with the types of the data
+        """
         result = {}
         for col_name, col_data in data.items():
             result[col_name] = type(col_data)
         return result
 
     def create_topic_table(self, topic, data):
+        """
+        Create a new topic table. At frist get the column definition. Then create the table from it.
+        :param topic: MQTT Topic
+        :param data: Data from the Payload
+        """
         self.logger.debug('Building new table for topic {}'.format(topic))
         column_def = self.get_column_def(data)
         self.create_table(topic, column_def)
 
     def get_topic_cls(self, topic, data):
-        try:
-            topic_table = Base.metadata.tables[topic]
-        except KeyError:
-            self.create_topic_table(topic, data)
-            topic_table = Base.metadata.tables[topic]
+        """
+        If the topic cannot be found in the metadata a new topic table will be creatd.
+        For this process we need the current data to determine the columns needed.
+        columns to be created.
+        :param topic: The mqtt topic
+        :param data: The data from the payload.
+        :return: the declarative class for the topic
+        """
 
-        try:
-            return topic_table.decl_class
-        except AttributeError:
-            pass
+        if topic not in Base.metadata.tables:
+            self.create_topic_table(topic, data)
+
+        topic_table = Base.metadata.tables[topic]
+
+        return topic_table.decl_class
 
     def add_packet(self, session, sender, topic, data):
+        """
+        Insert a package into to DB.
+        At first find the topic declarative class. Then instantiate it with the data from the payload.
+        Add it to the session and commit.
+        If a TypeError occurs we add the missing columns and try again.
+        :param session: Not used
+        :param sender: The sender ID of the package
+        :param topic: The MQTT topic
+        :param data: The data from the payload
+        """
+
         topic_cls = self.get_topic_cls(topic, data)
         try:
             topic_line = topic_cls(**data)
