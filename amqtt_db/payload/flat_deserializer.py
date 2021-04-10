@@ -1,6 +1,6 @@
 
 from amqtt_db.base.base_deserializer import BaseDeserializer
-from amqtt_db.base.utils import get_class_by_name
+from amqtt_db.base.utils import get_class_func_by_name
 
 
 class FlatDeserializer(BaseDeserializer):
@@ -28,7 +28,7 @@ class FlatDeserializer(BaseDeserializer):
         self.type_strs = types_strs
         self.col2type = {}    # Hold the actual mapping
         for key, type_str in types_strs.items():
-            self.col2type[key] = (get_class_by_name(type_str)) # get the string to class/function mapping
+            self.col2type[key] = (get_class_func_by_name(type_str)) # get the string to class/function mapping
 
     def deserialize(self, data):
         """

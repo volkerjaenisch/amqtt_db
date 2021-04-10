@@ -12,6 +12,8 @@ aiounittest = "^1.4.0"
 psycopg2 = "^2.8.6"
 PyYAML = "^5.4.1"
 sqlalchemy-migrate = "^0.13.0"
+Sphinx = "^3.5.3"
+sphinx-rtd-theme = "^0.5.2"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.3"

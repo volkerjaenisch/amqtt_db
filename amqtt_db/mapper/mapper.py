@@ -4,6 +4,9 @@ from amqtt_db.base.base_mapper import BaseMapper
 
 
 class WideMapper(BaseMapper):
+    """
+    Mapping each MQTT topic to a table. Any content in the Payload is a column in the table.
+    """
 
     async def on_save_session(self, session):
         """

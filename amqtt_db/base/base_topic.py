@@ -5,7 +5,7 @@ import re
 
 from amqtt_db.base.constants import PAYLOAD_CONFIG
 from amqtt_db.base.errors import TopicNotFound
-from amqtt_db.base.utils import get_class_by_name
+from amqtt_db.base.utils import get_class_func_by_name
 
 
 class BaseTopicEngine(object):
@@ -27,7 +27,7 @@ class BaseTopicEngine(object):
         for key, value in payload_config.items():
             entry = list(value.items())[0]
             decoder_cls_name = entry[0]
-            decoder_class = get_class_by_name(decoder_cls_name)
+            decoder_class = get_class_func_by_name(decoder_cls_name)
             if decoder_cls_name in self.decoders:
                 decoder = self.decoders[decoder_cls_name]
             else:
@@ -36,7 +36,7 @@ class BaseTopicEngine(object):
                 
             deserialier_config = entry[1]
             deserializer_cls_name, types = list(deserialier_config.items())[0]
-            deserializer_class = get_class_by_name(deserializer_cls_name)
+            deserializer_class = get_class_func_by_name(deserializer_cls_name)
             
             if deserializer_cls_name in self.deserializers:
                 deserializer = self.deserializers[deserializer_cls_name]
