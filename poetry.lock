@@ -55,6 +55,14 @@ optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
 [[package]]
+name = "decorator"
+version = "5.0.5"
+description = "Decorators for Humans"
+category = "main"
+optional = false
+python-versions = ">=3.5"
+
+[[package]]
 name = "docopt"
 version = "0.6.2"
 description = "Pythonic argument parser, that will make you smile"
@@ -121,6 +129,14 @@ argon2 = ["argon2-cffi (>=18.2.0)"]
 bcrypt = ["bcrypt (>=3.1.0)"]
 totp = ["cryptography"]
 build_docs = ["sphinx (>=1.6)", "sphinxcontrib-fulltoc (>=1.2.0)", "cloud-sptheme (>=1.10.1)"]
+
+[[package]]
+name = "pbr"
+version = "5.5.1"
+description = "Python Build Reasonableness"
+category = "main"
+optional = false
+python-versions = ">=2.6"
 
 [[package]]
 name = "pluggy"
@@ -230,6 +246,38 @@ mssql_pyodbc = ["pyodbc"]
 asyncio = ["greenlet (!=0.4.17)"]
 
 [[package]]
+name = "sqlalchemy-migrate"
+version = "0.13.0"
+description = "Database schema migration for SQLAlchemy"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+sqlparse = "*"
+SQLAlchemy = ">=0.9.6"
+pbr = ">=1.8"
+six = ">=1.7.0"
+Tempita = ">=0.4"
+decorator = "*"
+
+[[package]]
+name = "sqlparse"
+version = "0.4.1"
+description = "A non-validating SQL parser."
+category = "main"
+optional = false
+python-versions = ">=3.5"
+
+[[package]]
+name = "tempita"
+version = "0.5.2"
+description = "A very small text templating language"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "transitions"
 version = "0.8.7"
 description = "A lightweight, object-oriented Python state machine implementation with many extensions."
@@ -291,7 +339,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=1.2.3)", "pytest-flake8", "pyt
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "b265a3347ea1623e90ac7e3721c041cd562c6abbf2392463ec05ecf032ca1f90"
+content-hash = "e8d18ba4062003c0b02b6e1b441fd8ed82bfe17f4f458201095aea29bd90cf70"
 
 [metadata.files]
 aiounittest = [
@@ -312,6 +360,10 @@ attrs = [
 colorama = [
     {file = "colorama-0.4.4-py2.py3-none-any.whl", hash = "sha256:9f47eda37229f68eee03b24b9748937c7dc3868f906e8ba69fbcbdd3bc5dc3e2"},
     {file = "colorama-0.4.4.tar.gz", hash = "sha256:5941b2b48a20143d2267e95b1c2a7603ce057ee39fd88e7329b0c292aa16869b"},
+]
+decorator = [
+    {file = "decorator-5.0.5-py3-none-any.whl", hash = "sha256:b7157d62ea3c2c0c57b81a05e4569853e976a3dda5dd7a1cb86be78978c3c5f8"},
+    {file = "decorator-5.0.5.tar.gz", hash = "sha256:acda948ffcfe4bd0c4a57834b74ad968b91925b8201b740ca9d46fb8c5c618ce"},
 ]
 docopt = [
     {file = "docopt-0.6.2.tar.gz", hash = "sha256:49b3a825280bd66b3aa83585ef59c4a8c82f2c8a522dbe754a8bc8d08c85c491"},
@@ -376,6 +428,10 @@ packaging = [
 passlib = [
     {file = "passlib-1.7.4-py2.py3-none-any.whl", hash = "sha256:aa6bca462b8d8bda89c70b382f0c298a20b5560af6cbfa2dce410c0a2fb669f1"},
     {file = "passlib-1.7.4.tar.gz", hash = "sha256:defd50f72b65c5402ab2c573830a6978e5f202ad0d984793c8dde2c4152ebe04"},
+]
+pbr = [
+    {file = "pbr-5.5.1-py2.py3-none-any.whl", hash = "sha256:b236cde0ac9a6aedd5e3c34517b423cd4fd97ef723849da6b0d2231142d89c00"},
+    {file = "pbr-5.5.1.tar.gz", hash = "sha256:5fad80b613c402d5b7df7bd84812548b2a61e9977387a80a5fc5c396492b13c9"},
 ]
 pluggy = [
     {file = "pluggy-0.13.1-py2.py3-none-any.whl", hash = "sha256:966c145cd83c96502c3c3868f50408687b38434af77734af1e9ca461a4081d2d"},
@@ -472,6 +528,17 @@ sqlalchemy = [
     {file = "SQLAlchemy-1.4.1-cp39-cp39-win32.whl", hash = "sha256:a4fa7217a7e09aa2e89604813b9ba2b874ed106c5be4ac98fc93547c4472e0c0"},
     {file = "SQLAlchemy-1.4.1-cp39-cp39-win_amd64.whl", hash = "sha256:396621702babc3e92b93aa4fc6a858d6e41b6e10676e5e5e7a79869c59733c4e"},
     {file = "SQLAlchemy-1.4.1.tar.gz", hash = "sha256:a6afdab2d70ef9f9905eba5ba93cf78ed9ed188cde3abda3231cdb8fce005a84"},
+]
+sqlalchemy-migrate = [
+    {file = "sqlalchemy-migrate-0.13.0.tar.gz", hash = "sha256:0bc02e292a040ade5e35a01d3ea744119e1309cdddb704fdb99bac13236614f8"},
+    {file = "sqlalchemy_migrate-0.13.0-py2.py3-none-any.whl", hash = "sha256:e5d2348db19a5062132d93e3b4d9e7644af552fffbec4c78cc5358f848d2f6c1"},
+]
+sqlparse = [
+    {file = "sqlparse-0.4.1-py3-none-any.whl", hash = "sha256:017cde379adbd6a1f15a61873f43e8274179378e95ef3fede90b5aa64d304ed0"},
+    {file = "sqlparse-0.4.1.tar.gz", hash = "sha256:0f91fd2e829c44362cbcfab3e9ae12e22badaa8a29ad5ff599f9ec109f0454e8"},
+]
+tempita = [
+    {file = "Tempita-0.5.2.tar.gz", hash = "sha256:cacecf0baa674d356641f1d406b8bff1d756d739c46b869a54de515d08e6fc9c"},
 ]
 transitions = [
     {file = "transitions-0.8.7-py2.py3-none-any.whl", hash = "sha256:626229df01ea91dc0b28491bf5af7cc0aba6c2aa7289658e55ea77288258fa49"},

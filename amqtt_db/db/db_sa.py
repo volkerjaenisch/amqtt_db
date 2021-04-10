@@ -1,7 +1,9 @@
 from datetime import date, datetime, time
 
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, MetaData, Table
 from sqlalchemy.orm import sessionmaker
+
+from migrate.versioning.schema import Table as MiTable, Column as MiColumn
 
 from amqtt_db.base.base_db import BaseDB
 
@@ -45,6 +47,7 @@ class SA(BaseDB):
         self.autocommit = autocommit
         self.connect_string = connect_string
         self.engine = create_engine(connect_string, echo=echo)
+
         self.session = sessionmaker(bind=self.engine, autocommit=self.autocommit)()
         self.type_mapper = SATypeMapper()
 
@@ -72,6 +75,59 @@ class SA(BaseDB):
 
         _table = type(name, (Base,), table_description)
         Base.metadata.create_all(self.engine, tables=[Base.metadata.tables[name]])
+        Base.metadata._add_table(name, None, Base.metadata.tables[name])
+
+    def handle_new_columns(self, topic_cls, data):
+        new_cols = self.find_new_colums(topic_cls, data)
+        if len(new_cols) == 0:
+            return
+        self.add_new_colums(topic_cls, new_cols)
+
+    def find_new_colums(self, topic_cls, data):
+        new_columns = {}
+        existing_columns = topic_cls.__mapper__.columns
+        for col_name, value in data.items():
+            if col_name not in existing_columns:
+                col_type = type(value)
+                new_columns[col_name] = self.type_mapper.map[col_type]
+        return new_columns
+
+    def add_new_colums(self, topic_cls, column_def):
+        """
+        This is a bit of a hack since SQLAlchemy does not come with an out of the box solution
+        for such a volatile DB usage we need. SQLAlchemy is mostly used for quite static DB schema where migrations
+        happen infrequently. At the IoT-Front we have to deal with permanent changes of the DB schema due to changes
+        in the messages.
+        """
+        # The first part utilizes SQLalchemy.migrate to add new columns to the topic table.
+        table_name = str(topic_cls.__table__.name)
+        # Create a migration table.
+        table = MiTable(table_name, MetaData(bind=self.engine))
+        # for any new column
+        for col_name, col_type in column_def.items():
+            # Create a Migration Column
+            col = MiColumn(col_name, col_type)
+            # Do the migration
+            col.create(table)
+
+        # Now that we have a new table in the DB we should get rid of the old topic table,
+        # so we remove it from the metadata.
+        Base.metadata.remove(topic_cls.__table__)
+
+        # The new Topic Table we get by inspecting the the Table from the DB correctly
+        new_table = Table("test/topic_growth", Base.metadata, autoload_with=self.engine)
+
+        # From the new Topic Table we generate its declarative class
+        new_dcl = type(str(table_name), (Base,), {'__table__': new_table})
+
+        # Since the new topic table was gained by inspection and not declarative construction our nice mechanism
+        # (see db.base.py) to link the declarative class to the table automatically, failed.
+        # so we set the link manually
+        new_table.decl_class = new_dcl
+
+        # At last we add the new topic table to the metadata.
+        Base.metadata._add_table(table_name, None, new_table)
+
 
     def get_column_def(self, data):
         result = {}
@@ -91,11 +147,19 @@ class SA(BaseDB):
             self.create_topic_table(topic, data)
             topic_table = Base.metadata.tables[topic]
 
-        return topic_table.decl_class
+        try:
+            return topic_table.decl_class
+        except AttributeError:
+            pass
 
     def add_packet(self, session, sender, topic, data):
         topic_cls = self.get_topic_cls(topic, data)
-        topic_line = topic_cls(**data)
+        try:
+            topic_line = topic_cls(**data)
+        except TypeError:
+            self.handle_new_columns(topic_cls, data)
+            topic_cls = self.get_topic_cls(topic, data)
+            topic_line = topic_cls(**data)
 
         self.session.add(topic_line)
         self.session.commit()
