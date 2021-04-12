@@ -10,8 +10,8 @@ Submodules
    amqtt_db.base.base_db
    amqtt_db.base.base_decoder
    amqtt_db.base.base_deserializer
-   amqtt_db.base.base_mapper
    amqtt_db.base.base_plugin
+   amqtt_db.base.base_structure
    amqtt_db.base.base_topic
    amqtt_db.base.constants
    amqtt_db.base.delegator

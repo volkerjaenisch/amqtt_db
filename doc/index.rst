@@ -26,23 +26,24 @@ There are many things I hate on frameworks.
 
 but also some things I really like.
  - Batteries included
- - A base ground to settle on
+ - A base to grow from
  - DRY concepts
 
-Therefore I tried to come up with more of the later and less of the former.
+Therefore I come up with more of the later and less of the former.
 
 amqtt_db architecture
 =====================
 
 
-    .. figure:: ./static/data_flow.png
+    .. figure:: ./_static/data_flow.png
         :width: 800px
         :align: center
         :alt: alternate text
         :figclass: align-center
 
 
-The amqtt_db framework is configured completely via the mqtt yaml config file.
+The amqtt_db framework is configured completely via the amqtt config.yaml file.
+
 Four processing layers transform your MQTT data into your favourite structure in the BD:
 
  - The first layer is the DB Structure (One per plugin).

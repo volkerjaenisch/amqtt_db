@@ -9,8 +9,8 @@ Subpackages
 
    amqtt_db.base
    amqtt_db.db
-   amqtt_db.mapper
    amqtt_db.payload
+   amqtt_db.structure
    amqtt_db.tests
 
 Submodules
