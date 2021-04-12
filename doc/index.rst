@@ -44,13 +44,13 @@ amqtt_db architecture
 
 The amqtt_db framework is configured completely via the amqtt config.yaml file.
 
-Four processing layers transform your MQTT data into your favourite structure in the BD:
+Four processing layers transform your MQTT data into your favourite structure in the DB:
 
  - The first layer is the DB Structure (One per plugin).
    A DBStructure defines the general flow of data. How to map the incoming data into the DB structure.
    The default is to map each sender into its own table with the observables as columns of this table.
 
-   You are free to program any other DBStructure for your application.
+   You are free to program any other DB Structure for your application.
 
  - The second layer is the Decoder (One per topic).
    For each topic you can define a Decoder. The decoder transforms the MQTT payload into a python data structure.
