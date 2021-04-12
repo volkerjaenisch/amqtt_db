@@ -23,5 +23,5 @@ requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 
-[tool.poetry.plugins."hbmqtt.broker.plugins"]
+[tool.poetry.plugins."amqtt.broker.plugins"]
 amqtt_db = "amqtt_db.plugin:DBPlugin"

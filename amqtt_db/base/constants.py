@@ -14,4 +14,4 @@ PAYLOAD_CONFIG = 'payload'
 TOPIC_ENGINE = 'topic_engine'
 DB_CONNECT_STRING = 'db_connection'
 
-DB_MAPPER = 'db_mapper'
+DB_STRUCTURE = 'db_structure'

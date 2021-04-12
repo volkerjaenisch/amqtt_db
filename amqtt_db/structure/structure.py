@@ -1,11 +1,11 @@
 from hbmqtt.mqtt import PublishPacket
 
-from amqtt_db.base.base_mapper import BaseMapper
+from amqtt_db.base.base_structure import BaseStructure
 
 
-class WideMapper(BaseMapper):
+class WideStructure(BaseStructure):
     """
-    Mapping each MQTT topic to a table. Any content in the Payload is a column in the table.
+    Mapping each MQTT topics to a table. Any content in the Payload is a column in the table.
     """
 
     async def on_save_session(self, session):

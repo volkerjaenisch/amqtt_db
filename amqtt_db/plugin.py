@@ -4,9 +4,9 @@ import traceback
 
 from amqtt_db.base.base_plugin import BasePlugin
 from amqtt_db.base.base_topic import BaseTopicEngine
-from amqtt_db.base.constants import TOPIC_ENGINE, DB_CONNECT_STRING, DB_MAPPER
+from amqtt_db.base.constants import TOPIC_ENGINE, DB_CONNECT_STRING, DB_STRUCTURE
 from amqtt_db.db.db_sa import SA
-from amqtt_db.mapper.mapper import WideMapper
+from amqtt_db.structure.structure import WideStructure
 
 
 class DBPlugin(BasePlugin):
@@ -33,7 +33,7 @@ class DBPlugin(BasePlugin):
 
     def compose(self):
         """
-        Constructs the plugin by choosing the mapper and the DB interface according to the config
+        Constructs the plugin by choosing the structure and the DB interface according to the config
         """
         self.get_topic_engine()
         self.get_db()
@@ -77,17 +77,17 @@ class DBPlugin(BasePlugin):
 
     def get_mapper(self):
         """
-        Gets the mapper according to the config
+        Gets the structure according to the config
         """
         try:
-            _mapper_type = self.config[DB_MAPPER]
+            _mapper_type = self.config[DB_STRUCTURE]
         except KeyError as e:
-            msg = 'Cannot read/find "db_mapper" entry in config file part "{}"'.format(self.config_path)
+            msg = 'Cannot read/find "db_structure" entry in config file part "{}"'.format(self.config_path)
             self.context.logger.error(msg)
             self.handle_exception(e)
 
         try:
-            self.mapper = WideMapper(self.topic_engine, self.db, self.context)  # ToDo: Mapper Factory
+            self.mapper = WideStructure(self.topic_engine, self.db, self.context)  # ToDo: Mapper Factory
         except Exception as e:
             self.handle_exception(e)
 

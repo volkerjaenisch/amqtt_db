@@ -111,7 +111,7 @@ class SA(BaseDB):
     def add_new_columns(self, topic_cls, column_def):
         """
         This is a bit of a hack since SQLAlchemy does not come with an out of the box solution
-        for such a volatile DB usage we need. SQLAlchemy is mostly used for quite static DB schema where migrations
+        for such a volatile DB usage we need. SQLAlchemy is mostly used for quite _static DB schema where migrations
         happen infrequently. At the IoT-Front we have to deal with permanent changes of the DB schema due to changes
         in the messages.
         """

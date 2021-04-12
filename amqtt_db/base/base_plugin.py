@@ -8,7 +8,7 @@ class BasePlugin(Delegator):
     Plugin base class
     """
     DELEGATED_METHODS = {
-        'mapper': [
+        'structure': [
             ON_SAVE_SESSION,
             ON_FIND_SESSION,
             ON_DEL_SESSION,

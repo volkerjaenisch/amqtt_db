@@ -1,7 +1,7 @@
 import weakref
 
 
-class BaseMapper(object):
+class BaseStructure(object):
     """
     API for the mqtt handlers
     """
@@ -35,7 +35,7 @@ class BaseMapper(object):
     # @classmethod
     # def from_mapper_type(cls, parent, _mapper_type):
     #     """
-    #     Construct a mapper from mapper type
+    #     Construct a structure from structure type
     #     """
     #     return BaseMapper(parent)  # ToDo: Factory of mappers
 
