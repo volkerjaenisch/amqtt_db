@@ -71,7 +71,7 @@ class SA(BaseDB):
             table_description[col_name] = sa.Column(sa_col_type)
 
         # Construct the Table from the blueprint
-        _table = type(name, (Base,), table_description)
+        _table = type(name, (Base,), table_description)  # noqa: F841
         # Create the table in the DB
         Base.metadata.create_all(self.engine, tables=[Base.metadata.tables[name]])
         # Add the table to the metadata

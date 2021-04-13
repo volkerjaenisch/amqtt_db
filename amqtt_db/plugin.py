@@ -80,7 +80,7 @@ class DBPlugin(BasePlugin):
         Gets the structure according to the config
         """
         try:
-            _mapper_type = self.config[DB_STRUCTURE]
+            _mapper_type = self.config[DB_STRUCTURE]  # noqa: F841
         except KeyError as e:
             msg = 'Cannot read/find "db_structure" entry in config file part "{}"'.format(self.config_path)
             self.context.logger.error(msg)

@@ -32,17 +32,17 @@ class BaseTopicEngine(object):
                 decoder = self.decoders[decoder_cls_name]
             else:
                 decoder = decoder_class()
-                self.decoders[decoder_cls_name] = decoder 
-                
+                self.decoders[decoder_cls_name] = decoder
+
             deserialier_config = entry[1]
             deserializer_cls_name, types = list(deserialier_config.items())[0]
             deserializer_class = get_class_func_by_name(deserializer_cls_name)
-            
+
             if deserializer_cls_name in self.deserializers:
                 deserializer = self.deserializers[deserializer_cls_name]
             else:
                 deserializer = deserializer_class(types)
-                self.deserializers[deserializer_cls_name] = deserializer 
+                self.deserializers[deserializer_cls_name] = deserializer
 
             self.topic_handlers[key] = [decoder, deserializer]
             self.topic_re[re.compile(key)] = self.topic_handlers[key]

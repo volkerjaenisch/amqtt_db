@@ -8,5 +8,3 @@ class JSONDecoder(BaseDecoder):
     @staticmethod
     def decode(payload):
         return json.loads(payload)
-
-

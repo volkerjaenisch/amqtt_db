@@ -37,7 +37,6 @@ publish_packet = PublishPacket()
 publish_packet.variable_header = PublishVariableHeader('hall/temp_rh')
 
 payload = PublishPayload()
-payload.data = bytearray(b'''{"3c610515b7c4": {"current time": 1617663897, 
-"gas": 46.922, "temp": 24.35012, "press": 936.7473, "rh": 29.88471}}''')
+payload.data = bytearray(b'''{"3c610515b7c4": {"current time": 1617663897, "gas": 46.922, "temp": 24.35012, "press": 936.7473, "rh": 29.88471}}''')
 
 publish_packet.payload = payload
