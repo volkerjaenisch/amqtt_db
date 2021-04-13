@@ -13,7 +13,7 @@ plugins:
   - amqtt_db
 
 amqtt_db:
-  db_mapper : wide
+  db_structure : amqtt_db.structure.structure:WideStructure
   db_connection : 'sqlite:///test_topic.qlite'
 
   payload :
