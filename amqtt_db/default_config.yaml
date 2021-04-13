@@ -16,8 +16,7 @@ topic-check:
   enabled: False
 
 amqtt_db:
-  db_connection : 'postgresql://root:sas242@192.168.178.25/iot'
-#  db_connection : 'sqlite:///test_topic.sqlite'
+  db_connection : 'sqlite:///test_topic.sqlite'
   db_structure : amqtt_db.structure.structure:WideStructure
 
   payload :
