@@ -15,7 +15,7 @@ before_install:
 install:
   - poetry install
 script:
-- poetry run flake8 amqtt_db test
+- poetry run flake8 amqtt_db
 - poetry run coverage run --source=amqtt_db -m unittest discover -b
 
 notifications:
