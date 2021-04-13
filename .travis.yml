@@ -9,6 +9,8 @@ cache:
 
 before_install:
  - pip install poetry
+ - pip install flake8
+ - pip install coverage
 
 install:
   - poetry install
