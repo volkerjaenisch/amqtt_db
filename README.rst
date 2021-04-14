@@ -33,7 +33,7 @@ DB and timescale DB persistence for amqtt.
 Objective
 ---------
 
-amqtt_db will persist payloads received by the [amqtt broker](https://github.com/Yakifo/amqtt) into performant relational databases.
+amqtt_db will persist payloads received by the `amqtt broker <https://github.com/Yakifo/amqtt>` into performant relational databases.
 SQLAlchemy as well as timescaleBD are the target RMDB-Systems.
 
 amqtt_db will do two steps to persist the amqtt data:
@@ -59,7 +59,7 @@ If the handling of that package fails, exceptions will be raised, and the error 
 
 Since the change rate on the decoding, deserializing, database model is quite low this optimistic approach will be quite performant. 
 
-Details
--------
+Documentation
+-------------
 
-Please have a look at [payload handling](./payload_handling.md) and the [documentation](http://amqtt-db.readthedocs.io).
+Please have a look at the `documentation <http://amqtt-db.readthedocs.io>`.
