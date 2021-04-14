@@ -4,7 +4,7 @@ amqtt_db
 ![license](https://img.shields.io/github/license/volkerjaenisch/amqtt_db?style=flat-square)
 ![travis](https://api.travis-ci.org/volkerjaenisch/amqtt_db.svg?branch=main)
 ![coverals](https://coveralls.io/repos/github/volkerjaenisch/amqtt_db/badge.svg)
-[![PyPI](https://img.shields.io/pypi/v/amqtt_db?style=flat-square)](https://pypi.org/project/amqtt_db/)
+[![PyPI](https://img.shields.io/pypi/v/amqtt_db)](https://pypi.org/project/amqtt_db/)
 [![Documantation](https://img.shields.io/readthedocs/amqtt-db.svg)](https://amqtt_db.readthedocs.io/en/latest/)
 
 DB persistence for amqtt.
