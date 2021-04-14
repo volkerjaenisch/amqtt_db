@@ -1,6 +1,20 @@
 amqtt_db
 ========
 
+https://github.com/volkerjaenisch/amqtt_db
+.. image:: https://travis-ci.org/volkerjaenisch/amqtt_db.svg?branch=master
+   :target: https://travis-ci.org/github/volkerjaenisch/amqtt_db
+   :alt: Travis CI status
+
+.. image:: https://img.shields.io/coveralls/github/volkerjaenisch/amqtt_db/master.svg
+   :target: https://coveralls.io/github/volkerjaenisch/amqtt_db?branch=master
+   :alt: Coverage Status
+
+#.. image:: https://img.shields.io/readthedocs/pkandcatapde.svg
+#   :target: http://pkandcatapde.readthedocs.io
+#   :alt: Documentation
+
+
 DB and timescale DB persistence for amqtt.
 
 Objective
