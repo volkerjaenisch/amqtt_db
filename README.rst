@@ -1,8 +1,8 @@
 amqtt_db
 ========
 
-.. |license| image:: https://img.shields.io/github/license/Yakifo/amqtt?style=flat-square
-    :target: https://amqtt.readthedocs.io/en/latest/
+.. |license| image:: https://img.shields.io/github/license/volkerjaenisch/amqtt_db?style=flat-square
+    :target: https://amqtt_db.readthedocs.io/en/latest/
     :alt: MIT licensed
 
 .. image:: https://api.travis-ci.org/volkerjaenisch/amqtt_db.svg?branch=main
