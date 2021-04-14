@@ -1,7 +1,8 @@
 amqtt_db
 ========
 
-.. image:: https://travis-ci.org/volkerjaenisch/amqtt_db.svg?branch=master
+
+.. image:: https://api.travis-ci.org/volkerjaenisch/amqtt_db.svg?branch=main
    :target: https://travis-ci.org/github/volkerjaenisch/amqtt_db
    :alt: Travis CI status
 
