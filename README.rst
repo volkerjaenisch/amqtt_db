@@ -9,10 +9,6 @@ amqtt_db
    :target: https://coveralls.io/github/volkerjaenisch/amqtt_db?branch=master
    :alt: Coverage Status
 
-#.. image:: https://img.shields.io/readthedocs/pkandcatapde.svg
-#   :target: http://pkandcatapde.readthedocs.io
-#   :alt: Documentation
-
 
 DB and timescale DB persistence for amqtt.
 

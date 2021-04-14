@@ -14,9 +14,15 @@ before_install:
 
 install:
   - poetry install
+
 script:
 - poetry run flake8 amqtt_db
 - poetry run coverage run --source=amqtt_db -m unittest discover -b
+
+after_success:
+  - travis_wait 45 bin/createcoverage
+  - pip install coveralls
+  - coveralls
 
 notifications:
   email:
