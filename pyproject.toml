@@ -1,11 +1,11 @@
 [tool.poetry]
 name = "amqtt_db"
-version = "0.1.0"
+version = "0.1.1"
 description = ""
 authors = ["volker <volker.jaenisch@inqbus.de>"]
 
 license = "MIT"
-readme = "README.rst"
+readme = "README.md"
 homepage = "https://github.com/volkerjaenisch/amqtt_db"
 repository = "https://github.com/volkerjaenisch/amqtt_db"
 keywords = ["amqtt", "MQTT", "Persistence", "SQLAlchemy", "Database"]
