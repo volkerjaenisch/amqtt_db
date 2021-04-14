@@ -62,4 +62,4 @@ Since the change rate on the decoding, deserializing, database model is quite lo
 Details
 -------
 
-Please have a look at [payload handling](./payload_handling.md)
+Please have a look at [payload handling](./payload_handling.md) and the [documentation](http://amqtt-db.readthedocs.io).
