@@ -23,6 +23,10 @@ amqtt_db
     :target: https://pypi.org/project/amqtt/
     :alt: PyPI
 
+.. image:: https://img.shields.io/readthedocs/amqtt_db.svg
+   :target: http://amqtt-db.readthedocs.io
+   :alt: Documentation
+
 
 DB and timescale DB persistence for amqtt.
 
