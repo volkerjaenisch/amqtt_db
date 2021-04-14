@@ -1,31 +1,15 @@
 amqtt_db
 ========
 
-.. |license| image:: https://img.shields.io/github/license/volkerjaenisch/amqtt_db?style=flat-square
-    :target: https://amqtt_db.readthedocs.io/en/latest/
-    :alt: MIT licensed
+![license](https://img.shields.io/github/license/volkerjaenisch/amqtt_db?style=flat-square)
 
-.. image:: https://api.travis-ci.org/volkerjaenisch/amqtt_db.svg?branch=main
-   :target: https://travis-ci.org/github/volkerjaenisch/amqtt_db
-   :alt: Travis CI status
+![travis](https://api.travis-ci.org/volkerjaenisch/amqtt_db.svg?branch=main)
 
-.. image:: https://img.shields.io/coveralls/github/volkerjaenisch/amqtt_db/master.svg
-   :target: https://coveralls.io/github/volkerjaenisch/amqtt_db?branch=master
-   :alt: Coverage Status
+![coverals](https://img.shields.io/coveralls/github/volkerjaenisch/amqtt_db/master.svg)
 
-.. |python_versions| image:: https://img.shields.io/pypi/pyversions/amqtt_db?style=flat-square
-    :alt: Python Version
+![PyPI](https://img.shields.io/pypi/v/amqtt_db?style=flat-square)
 
-.. |python_wheel| image:: https://img.shields.io/pypi/wheel/amqtt_db?style=flat-square
-    :alt: supports python wheel
-
-.. |PyPI| image:: https://img.shields.io/pypi/v/amqtt_db?style=flat-square
-    :target: https://pypi.org/project/amqtt/
-    :alt: PyPI
-
-.. image:: https://img.shields.io/readthedocs/amqtt-db.svg
-   :target: http://amqtt-db.readthedocs.io
-   :alt: Documentation
+![Documantation](https://img.shields.io/readthedocs/amqtt-db.svg)
 
 
 DB and timescale DB persistence for amqtt.
