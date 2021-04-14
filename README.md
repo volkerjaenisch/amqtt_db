@@ -2,17 +2,12 @@ amqtt_db
 ========
 
 ![license](https://img.shields.io/github/license/volkerjaenisch/amqtt_db?style=flat-square)
-
 ![travis](https://api.travis-ci.org/volkerjaenisch/amqtt_db.svg?branch=main)
+![coverals](https://coveralls.io/repos/github/volkerjaenisch/amqtt_db/badge.svg)
+[![PyPI](https://img.shields.io/pypi/v/amqtt_db?style=flat-square)](https://pypi.org/project/amqtt/)
+[![Documantation](https://img.shields.io/readthedocs/amqtt-db.svg)](https://amqtt_db.readthedocs.io/en/latest/)
 
-![coverals](https://img.shields.io/coveralls/github/volkerjaenisch/amqtt_db/master.svg)
-
-![PyPI](https://img.shields.io/pypi/v/amqtt_db?style=flat-square)
-
-![Documantation](https://img.shields.io/readthedocs/amqtt-db.svg)
-
-
-DB and timescale DB persistence for amqtt.
+DB persistence for amqtt.
 
 Objective
 ---------
