@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "amqtt_db"
-version = "0.1.1"
+version = "0.1.2"
 description = ""
 authors = ["volker <volker.jaenisch@inqbus.de>"]
 

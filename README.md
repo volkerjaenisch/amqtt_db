@@ -15,14 +15,17 @@ Objective
 amqtt_db will persist payloads received by the [amqtt broker](https://github.com/Yakifo/amqtt) into performant relational databases.
 SQLAlchemy as well as timescaleBD are the target RMDB-Systems.
 
-amqtt_db will do two steps to persist the amqtt data:
+amqtt_db will do four steps to persist the amqtt data:
 
- 1) decoding, and deserializing the payload of the MQTT packets
- 1) transformation of the session, topic, property, value information into relational data models  
+ 1) decoding the payload (e.G. from binary, JSON or which ever encoding)
+ 1) deserializing the payload to typed Python entities
+ 1) structure the session, topic, property, value information into a relational model of your choice
+ 1) generate the necessary tables, columns to store the data 
 
-amqtt_db will support a wide variety of decodings, deserialisations, and target database models, by design.
-
+All of this steps can be configured via the amqtt yaml config. And you can even replace any these steps for each topic 
+by your code in terms of Python plugins.
 amqtt is designed to be enhanced and extended.
+
 
 Performance
 -----------
