@@ -8,12 +8,12 @@ class WideStructure(BaseStructure):
     Mapping each MQTT topics to a table. Any content in the Payload is a column in the table.
     """
 
-    async def on_save_session(self, session):
-        """
-        Persist the session
-        :param session: The current session
-        """
-        self.logger.debug("saving session {}".format(session))
+    # async def on_save_session(self, session):
+    #     """
+    #     Persist the session
+    #     :param session: The current session
+    #     """
+    #     self.logger.debug("saving session {}".format(session))
 
     async def on_mqtt_packet_received(self, packet=None, session=None):
         if not isinstance(packet, PublishPacket):
@@ -26,7 +26,7 @@ class WideStructure(BaseStructure):
         decoded_payload = decoder.decode(packet.payload.data)
 
         sender, data = list(decoded_payload.items())[0]
-        typed_data = deserializer.deserialize(data)
+        typed_data, residual_data = deserializer.deserialize(data)  # ToDo: Handle residual data
         typed_data['sender'] = int(sender, 16)
         self.db.add_packet(session, sender, self.topic2SQL(topic), typed_data)
 

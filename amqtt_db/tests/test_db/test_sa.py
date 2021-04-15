@@ -4,7 +4,7 @@ from datetime import date, time, datetime
 import unittest
 
 from amqtt_db.db.db_sa import SA
-from amqtt_db.tests.resources.mockups import context
+from amqtt_db.tests.resources.mockups import get_context, CONFIG_OK
 
 from tempfile import TemporaryDirectory
 
@@ -14,6 +14,7 @@ class TestSA(unittest.TestCase):
     def create_test_db(self):
         temp_dir = TemporaryDirectory()
         temp_db_file_name = os.path.join(temp_dir.name, 'huhu')
+        context = get_context(CONFIG_OK)
         sa = SA(context, 'sqlite:///{}'.format(temp_db_file_name), echo=True)
         return temp_dir, sa
 

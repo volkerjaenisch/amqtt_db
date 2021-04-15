@@ -1,4 +1,3 @@
-
 from unittest.mock import MagicMock
 
 import yaml
@@ -8,13 +7,14 @@ from hbmqtt.mqtt.publish import PublishPayload, PublishVariableHeader
 
 import logging
 
-CONFIG = """
+
+CONFIG_OK = """
 plugins:
   - amqtt_db
 
 amqtt_db:
-  db_structure : amqtt_db.structure.structure:WideStructure
-  db_connection : 'sqlite:///test_topic.qlite'
+  db_structure : amqtt_db.structure.structure.WideStructure
+  db_connection : 'sqlite:///memory'
 
   payload :
     hall/temp_rh :
@@ -27,10 +27,106 @@ amqtt_db:
           'current time' : datetime.datetime.utcfromtimestamp
 """
 
+CONFIG_PLUGIN_NAME_WRONG = """
+plugins:
+  - amqtt_db22
+"""
 
-context = MagicMock(spec=BrokerContext)()
-context.config = yaml.load(CONFIG, Loader=yaml.FullLoader)
-context.logger = logging.getLogger('test')
+CONFIG_AMQTT_DB_MISSING = """
+plugins:
+  - amqtt_db
+"""
+
+CONFIG_TOPIC_ENGINE_WRONG = """
+plugins:
+  - amqtt_db
+
+amqtt_db:
+    topic_engine : None
+"""
+
+CONFIG_NO_DB_CONNECT_STRING = """
+plugins:
+  - amqtt_db
+
+amqtt_db:
+    payload :
+        hall/temp_rh :
+          amqtt_db.payload.json_decoder.JSONDecoder :
+            amqtt_db.payload.flat_deserializer.FlatDeserializer :
+              temp : float
+"""
+
+CONFIG_NO_DB_STRUCTURE = """
+plugins:
+  - amqtt_db
+
+amqtt_db:
+    db_connection : 'sqlite:///memory'
+    payload :
+        hall/temp_rh :
+          amqtt_db.payload.json_decoder.JSONDecoder :
+            amqtt_db.payload.flat_deserializer.FlatDeserializer :
+              temp : float
+"""
+
+
+CONFIG_WRONG_DB_STRUCTURE = """
+plugins:
+  - amqtt_db
+
+amqtt_db:
+    db_structure : amqtt_db.structure.structure.WideStru
+    db_connection : 'sqlite:///memory'
+    payload :
+        hall/temp_rh :
+          amqtt_db.payload.json_decoder.JSONDecoder :
+            amqtt_db.payload.flat_deserializer.FlatDeserializer :
+              temp : float
+"""
+
+CONFIG_TOPIC_WILDCARD = """
+plugins:
+  - amqtt_db
+
+amqtt_db:
+    db_structure : amqtt_db.structure.structure.WideStructure
+    db_connection : 'sqlite:///memory'
+    payload :
+        hall/* :
+          amqtt_db.payload.json_decoder.JSONDecoder :
+            amqtt_db.payload.flat_deserializer.FlatDeserializer :
+              temp : float
+              press : float
+              gas : float
+              rh : float
+              'current time' : datetime.datetime.utcfromtimestamp
+"""
+
+CONFIG_MISSING_RH_MEASURE = """
+plugins:
+  - amqtt_db
+
+amqtt_db:
+    db_structure : amqtt_db.structure.structure.WideStructure
+    db_connection : 'sqlite:///memory'
+    payload :
+        hall/temp_rh :
+          amqtt_db.payload.json_decoder.JSONDecoder :
+            amqtt_db.payload.flat_deserializer.FlatDeserializer :
+              temp : float
+              press : float
+              gas : float
+              'current time' : datetime.datetime.utcfromtimestamp
+"""
+
+
+def get_context(config):
+    context = MagicMock(spec=BrokerContext)()
+    context.config = yaml.load(config, Loader=yaml.FullLoader)
+    context.logger = logging.getLogger('test')
+    context.logger.handlers = [logging.NullHandler()]
+    return context
 
 
 publish_packet = PublishPacket()

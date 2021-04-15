@@ -21,6 +21,7 @@ class BasePlugin(Delegator):
     config = None
 
     def __init__(self, context):
+        super(BasePlugin, self).__init__()
         self.context = context
         self.init_config(context)
 
@@ -38,7 +39,7 @@ class BasePlugin(Delegator):
             if path_parts[-1] in temp_config:
                 self.config = context.config[path_parts[-1]]
             else:
-                raise ImportError()
+                raise ImportError
 
         except KeyError as e:
             msg = 'amqtt_db: Plugin config not found under "{}" in the config file '.format(self.config_path)

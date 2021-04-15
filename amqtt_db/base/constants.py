@@ -11,6 +11,8 @@ ON_MQTT_PACKET_RECEIVED = 'on_mqtt_packet_received'
 BASE_CONFIG_PATH = 'plugins'
 PAYLOAD_CONFIG = 'payload'
 
+AMQTT_PLUGIN_NAME = 'amqtt_db'
+
 TOPIC_ENGINE = 'topic_engine'
 DB_CONNECT_STRING = 'db_connection'
 

@@ -7,12 +7,12 @@ amqtt_db
 [![PyPI](https://img.shields.io/pypi/v/amqtt_db)](https://pypi.org/project/amqtt_db/)
 [![Documantation](https://img.shields.io/readthedocs/amqtt-db.svg)](https://amqtt_db.readthedocs.io/en/latest/)
 
-DB persistence for amqtt.
+DB persistence for [amqtt](https://github.com/Yakifo/amqtt).
 
 Objective
 ---------
 
-amqtt_db will persist payloads received by the [amqtt broker](https://github.com/Yakifo/amqtt) into performant relational databases.
+amqtt_db persists payloads received by the [amqtt broker](https://github.com/Yakifo/amqtt) into performant relational databases.
 SQLAlchemy as well as timescaleBD are the target RMDB-Systems.
 
 amqtt_db will do four steps to persist the amqtt data:

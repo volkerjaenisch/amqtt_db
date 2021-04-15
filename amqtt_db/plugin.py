@@ -5,8 +5,8 @@ import traceback
 from amqtt_db.base.base_plugin import BasePlugin
 from amqtt_db.base.base_topic import BaseTopicEngine
 from amqtt_db.base.constants import TOPIC_ENGINE, DB_CONNECT_STRING, DB_STRUCTURE
+from amqtt_db.base.utils import get_class_func_by_name
 from amqtt_db.db.db_sa import SA
-from amqtt_db.structure.structure import WideStructure
 
 
 class DBPlugin(BasePlugin):
@@ -16,7 +16,7 @@ class DBPlugin(BasePlugin):
 
     config_path = 'plugins.amqtt_db'
     db = None
-    mapper = None
+    structure = None
     topic_engine = None
 
     def __init__(self, context):
@@ -29,7 +29,7 @@ class DBPlugin(BasePlugin):
         exc_type, exc_value, exc_traceback = sys.exc_info()
         for line in traceback.format_tb(exc_traceback):
             self.context.logger.error(line[:-1])
-        raise ImportError
+        raise ImportError()
 
     def compose(self):
         """
@@ -37,7 +37,7 @@ class DBPlugin(BasePlugin):
         """
         self.get_topic_engine()
         self.get_db()
-        self.get_mapper()
+        self.get_structure()
         self.register_events()
 
     def get_topic_engine(self):
@@ -59,9 +59,6 @@ class DBPlugin(BasePlugin):
         """
         Gets the DB according to the config
         """
-        if DB_CONNECT_STRING not in self.config:
-            raise
-
         try:
             connect_string = self.config[DB_CONNECT_STRING]
         except KeyError as e:
@@ -75,25 +72,26 @@ class DBPlugin(BasePlugin):
             self.context.logger.error(msg)
             self.handle_exception(e)
 
-    def get_mapper(self):
+    def get_structure(self):
         """
         Gets the structure according to the config
         """
         try:
-            _mapper_type = self.config[DB_STRUCTURE]  # noqa: F841
+            structure_cls_str = self.config[DB_STRUCTURE]  # noqa: F841
         except KeyError as e:
             msg = 'Cannot read/find "db_structure" entry in config file part "{}"'.format(self.config_path)
             self.context.logger.error(msg)
             self.handle_exception(e)
 
         try:
-            self.mapper = WideStructure(self.topic_engine, self.db, self.context)  # ToDo: Mapper Factory
+            structure_cls = get_class_func_by_name(structure_cls_str)
+            self.structure = structure_cls(self.topic_engine, self.db, self.context)  # ToDo: Mapper Factory
         except Exception as e:
             self.handle_exception(e)
 
     def register_events(self):
         events = {}
-        method_names = inspect.getmembers(self.mapper, predicate=inspect.ismethod)
+        method_names = inspect.getmembers(self.structure, predicate=inspect.ismethod)
         for method_name, method in method_names:
             if method_name.startswith('on_'):
                 events[method_name] = method
@@ -103,5 +101,5 @@ class DBPlugin(BasePlugin):
         try:
             result = self.__getattribute__(item)
         except AttributeError:
-            result = getattr(self.mapper, item)
+            result = getattr(self.structure, item)
         return result

@@ -37,6 +37,10 @@ class FlatDeserializer(BaseDeserializer):
         :return: typed data
         """
         result = {}
+        residual = {}
         for key, value in data.items():
-            result[key] = self.col2type[key](value)  # do the mapping
-        return result
+            try:
+                result[key] = self.col2type[key](value)  # do the mapping
+            except KeyError:
+                residual[key] = None
+        return result, residual

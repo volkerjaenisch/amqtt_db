@@ -4,7 +4,7 @@ Base of a topic engine, routing the payload to the configured deserializer
 import re
 
 from amqtt_db.base.constants import PAYLOAD_CONFIG
-from amqtt_db.base.errors import TopicNotFound
+from amqtt_db.base.errors import TopicNotFound, NoPayloadDefinition, WrongPayloadDefinition
 from amqtt_db.base.utils import get_class_func_by_name
 
 
@@ -23,29 +23,35 @@ class BaseTopicEngine(object):
         Build a simple parse tree out of the payload config
         :param config: The payload config
         """
-        payload_config = config[PAYLOAD_CONFIG]
-        for key, value in payload_config.items():
-            entry = list(value.items())[0]
-            decoder_cls_name = entry[0]
-            decoder_class = get_class_func_by_name(decoder_cls_name)
-            if decoder_cls_name in self.decoders:
-                decoder = self.decoders[decoder_cls_name]
-            else:
-                decoder = decoder_class()
-                self.decoders[decoder_cls_name] = decoder
+        try:
+            payload_config = config[PAYLOAD_CONFIG]
+        except KeyError:
+            raise NoPayloadDefinition
+        try:
+            for key, value in payload_config.items():
+                entry = list(value.items())[0]
+                decoder_cls_name = entry[0]
+                decoder_class = get_class_func_by_name(decoder_cls_name)
+                if decoder_cls_name in self.decoders:
+                    decoder = self.decoders[decoder_cls_name]
+                else:
+                    decoder = decoder_class()
+                    self.decoders[decoder_cls_name] = decoder
 
-            deserialier_config = entry[1]
-            deserializer_cls_name, types = list(deserialier_config.items())[0]
-            deserializer_class = get_class_func_by_name(deserializer_cls_name)
+                deserialier_config = entry[1]
+                deserializer_cls_name, types = list(deserialier_config.items())[0]
+                deserializer_class = get_class_func_by_name(deserializer_cls_name)
 
-            if deserializer_cls_name in self.deserializers:
-                deserializer = self.deserializers[deserializer_cls_name]
-            else:
-                deserializer = deserializer_class(types)
-                self.deserializers[deserializer_cls_name] = deserializer
+                if deserializer_cls_name in self.deserializers:
+                    deserializer = self.deserializers[deserializer_cls_name]
+                else:
+                    deserializer = deserializer_class(types)
+                    self.deserializers[deserializer_cls_name] = deserializer
 
-            self.topic_handlers[key] = [decoder, deserializer]
-            self.topic_re[re.compile(key)] = self.topic_handlers[key]
+                self.topic_handlers[key] = [decoder, deserializer]
+                self.topic_re[re.compile(key)] = self.topic_handlers[key]
+        except (KeyError, AttributeError):
+            raise WrongPayloadDefinition
 
     def topic2handler(self, topic):
         """
@@ -70,7 +76,7 @@ class BaseTopicEngine(object):
         """
         for regex, handler in self.topic_re.items():
             if regex.match(topic):
-                self.topic_handlers[topic] = self.topic_handlers[regex]
-                return self.topic_handlers[regex]
+                self.topic_handlers[topic] = self.topic_re[regex]
+                return self.topic_re[regex]
 
         return None
