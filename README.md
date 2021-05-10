@@ -2,8 +2,10 @@ amqtt_db
 ========
 
 ![license](https://img.shields.io/github/license/volkerjaenisch/amqtt_db?style=flat-square)
-![travis](https://api.travis-ci.org/volkerjaenisch/amqtt_db.svg?branch=main)
-![coverals](https://coveralls.io/repos/github/volkerjaenisch/amqtt_db/badge.svg)
+
+[![Build Status](https://travis-ci.org/volkerjaenisch/amqtt_db.svg?branch=main)](https://travis-ci.org/volkerjaenisch/amqtt_db)
+
+[![Coverage Status](https://coveralls.io/repos/github/volkerjaenisch/amqtt_db/badge.svg?branch=main)](https://coveralls.io/github/volkerjaenisch/amqtt_db?branch=main)
 [![PyPI](https://img.shields.io/pypi/v/amqtt_db)](https://pypi.org/project/amqtt_db/)
 [![Documantation](https://img.shields.io/readthedocs/amqtt-db.svg)](https://amqtt_db.readthedocs.io/en/latest/)
 
