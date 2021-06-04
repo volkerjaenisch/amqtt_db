@@ -17,12 +17,13 @@ topic-check:
 
 amqtt_db:
   db_connection : 'sqlite:///test_topic.sqlite'
-  db_structure : amqtt_db.structure.structure:WideStructure
+  db_structure : amqtt_db.structure.structure.WideStructure
 
   payload :
     tinkershop/trh :
       amqtt_db.payload.json_decoder.JSONDecoder :
         amqtt_db.payload.flat_deserializer.FlatDeserializer :
+          moist : int
           temp : float
           rh : float
           press : float
