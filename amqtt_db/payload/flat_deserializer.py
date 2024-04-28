@@ -38,9 +38,15 @@ class FlatDeserializer(BaseDeserializer):
         """
         result = {}
         residual = {}
+        found = set()
+        all_keys = set(self.col2type)
         for key, value in data.items():
             try:
                 result[key] = self.col2type[key](value)  # do the mapping
+                found.add(key)
             except KeyError:
                 residual[key] = None
+        for key in all_keys - found:
+            result[key] = self.col2type[key]()
+
         return result, residual

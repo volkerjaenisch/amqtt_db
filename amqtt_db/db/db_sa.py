@@ -42,7 +42,7 @@ class SA(BaseDB):
     session = None
     type_mapper = None
 
-    def init_db(self, connect_string, autocommit=True, echo=False):
+    def init_db(self, connect_string, autocommit=False, echo=False):
         """
         Initialize the DB
         """
@@ -66,6 +66,7 @@ class SA(BaseDB):
         """
         # The blueprint of the table
         table_description = {
+            '__table_args__' : {'extend_existing': True},
             '__tablename__': name,
             'id': sa.Column(sa.BigInteger().with_variant(sa.Integer, "sqlite"), primary_key=True),
             'sqlite_autoincrement': True,
@@ -217,7 +218,7 @@ class SA(BaseDB):
             topic_line = topic_cls(**data)
 
         self.session.add(topic_line)
-        # self.session.commit()
+        self.session.commit()
 
     def query_topic(self, topic, data):
         topic_cls = self.get_topic_cls(topic, data)

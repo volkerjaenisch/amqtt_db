@@ -29,7 +29,7 @@ class DBPlugin(BasePlugin):
         exc_type, exc_value, exc_traceback = sys.exc_info()
         for line in traceback.format_tb(exc_traceback):
             self.context.logger.error(line[:-1])
-        raise ImportError()
+        raise ImportError
 
     def compose(self):
         """

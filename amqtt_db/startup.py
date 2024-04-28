@@ -1,8 +1,8 @@
 import asyncio
 import logging
 
-from hbmqtt.broker import Broker
-from hbmqtt.utils import read_yaml_config
+from amqtt.broker import Broker
+from amqtt.utils import read_yaml_config
 
 
 def main():
