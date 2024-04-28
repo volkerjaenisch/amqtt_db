@@ -1,9 +1,9 @@
 from unittest.mock import MagicMock
 
 import yaml
-from hbmqtt.broker import BrokerContext
-from hbmqtt.mqtt import PublishPacket
-from hbmqtt.mqtt.publish import PublishPayload, PublishVariableHeader
+from amqtt.broker import BrokerContext
+from amqtt.mqtt import PublishPacket
+from amqtt.mqtt.publish import PublishPayload, PublishVariableHeader
 
 import logging
 

@@ -1,9 +1,11 @@
 from datetime import date, datetime, time
 
-from sqlalchemy import create_engine, MetaData, Table
+from alembic.operations import Operations
+from alembic.runtime.migration import MigrationContext
+from sqlalchemy import create_engine, Table, Column
 from sqlalchemy.orm import sessionmaker
 
-from migrate.versioning.schema import Table as MiTable, Column as MiColumn
+# from migrate.versioning.schema import Table as MiTable, Column as MiColumn
 
 from amqtt_db.base.base_db import BaseDB
 
@@ -40,7 +42,7 @@ class SA(BaseDB):
     session = None
     type_mapper = None
 
-    def init_db(self, connect_string, autocommit=False, echo=False):
+    def init_db(self, connect_string, autocommit=True, echo=False):
         """
         Initialize the DB
         """
@@ -49,6 +51,12 @@ class SA(BaseDB):
         self.engine = create_engine(connect_string, echo=echo)
         self.session = sessionmaker(bind=self.engine, autocommit=self.autocommit)()
         self.type_mapper = SATypeMapper()
+
+        # Create migration context
+        self.mc = MigrationContext.configure(self.engine.connect())
+
+        # Creation operations object
+        self.ops = Operations(self.mc)
 
     def create_table(self, name, column_def):
         """
@@ -77,7 +85,7 @@ class SA(BaseDB):
         # Add the table to the metadata
         Base.metadata._add_table(name, None, Base.metadata.tables[name])
 
-    def handle_new_columns(self, topic_cls, data):
+    def handle_new_columns(self, topic, topic_cls, data):
         """
         Handle new columns.
         :param topic_cls: The topic decl class
@@ -90,7 +98,7 @@ class SA(BaseDB):
         if len(new_cols) == 0:
             return
         # We need new columns, add them
-        self.add_new_columns(topic_cls, new_cols)
+        self.add_new_columns(topic, topic_cls, new_cols)
 
     def find_new_colums(self, topic_cls, data):
         """
@@ -108,41 +116,47 @@ class SA(BaseDB):
                 new_columns[col_name] = self.type_mapper.map[col_type]
         return new_columns
 
-    def add_new_columns(self, topic_cls, column_def):
-        """
-        This is a bit of a hack since SQLAlchemy does not come with an out of the box solution
-        for such a volatile DB usage we need. SQLAlchemy is mostly used for quite _static DB schema where migrations
-        happen infrequently. At the IoT-Front we have to deal with permanent changes of the DB schema due to changes
-        in the messages.
-        """
-        # The first part utilizes SQLalchemy.migrate to add new columns to the topic table.
-        table_name = str(topic_cls.__table__.name)
-        # Create a migration table.
-        table = MiTable(table_name, MetaData(bind=self.engine))
-        # for any new column
-        for col_name, col_type in column_def.items():
-            # Create a Migration Column
-            col = MiColumn(col_name, col_type)
-            # Do the migration
-            col.create(table)
+    def add_new_columns(self, topic, topic_cls, column_def):
+        for name, type_ in column_def.items():
+            self.ops.add_column(topic, Column(name=name, type_=type_))
+        #  add_columns(topic_cls, column_def)
+        pass
 
+    # def add_new_columns(self, topic_cls, column_def):
+    #     """
+    #     This is a bit of a hack since SQLAlchemy does not come with an out of the box solution
+    #     for such a volatile DB usage we need. SQLAlchemy is mostly used for quite _static DB schema where migrations
+    #     happen infrequently. At the IoT-Front we have to deal with permanent changes of the DB schema due to changes
+    #     in the messages.
+    #     """
+    #     # The first part utilizes SQLalchemy.migrate to add new columns to the topic table.
+    #     table_name = str(topic_cls.__table__.name)
+    #     # Create a migration table.
+    #     table = MiTable(table_name, MetaData(bind=self.engine))
+    #     # for any new column
+    #     for col_name, col_type in column_def.items():
+    #         # Create a Migration Column
+    #         col = MiColumn(col_name, col_type)
+    #         # Do the migration
+    #         col.create(table)
+    #
         # Now that we have a new table in the DB we should get rid of the old topic table,
         # so we remove it from the metadata.
         Base.metadata.remove(topic_cls.__table__)
 
-        # The new Topic Table we get by inspecting the the Table from the DB correctly
-        new_table = Table("test/topic_growth", Base.metadata, autoload_with=self.engine)
+        # The new Topic Table we get by inspecting the Table from the DB correctly
+        new_table = Table(topic, Base.metadata, autoload_with=self.engine)
 
         # From the new Topic Table we generate its declarative class
-        new_dcl = type(str(table_name), (Base,), {'__table__': new_table})
+        new_dcl = type(str(topic), (Base,), {'__table__': new_table})
 
         # Since the new topic table was gained by inspection and not declarative construction our nice mechanism
         # (see db.base.py) to link the declarative class to the table automatically, failed.
         # so we set the link manually
         new_table.decl_class = new_dcl
 
-        # At last we add the new topic table to the metadata.
-        Base.metadata._add_table(table_name, None, new_table)
+        # At last, we add the new topic table to the metadata.
+        Base.metadata._add_table(topic, None, new_table)
 
     def get_column_def(self, data):
         """
@@ -198,12 +212,12 @@ class SA(BaseDB):
         try:
             topic_line = topic_cls(**data)
         except TypeError:
-            self.handle_new_columns(topic_cls, data)
+            self.handle_new_columns(topic, topic_cls, data)
             topic_cls = self.get_topic_cls(topic, data)
             topic_line = topic_cls(**data)
 
         self.session.add(topic_line)
-        self.session.commit()
+        # self.session.commit()
 
     def query_topic(self, topic, data):
         topic_cls = self.get_topic_cls(topic, data)

@@ -30,7 +30,7 @@ class BaseDB(object):
         Creates a table based on table_name and column definition. Where Column_def is a dict of col_name, col_type
         """
 
-    def add_new_columns(self, table, columns):
+    def add_new_columns(self, table, table_cls, columns):
         """
         Extends a table with some columns
         """

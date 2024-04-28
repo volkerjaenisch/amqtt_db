@@ -1,4 +1,4 @@
-from hbmqtt.mqtt import PublishPacket
+from amqtt.mqtt import PublishPacket
 
 from amqtt_db.base.base_structure import BaseStructure
 

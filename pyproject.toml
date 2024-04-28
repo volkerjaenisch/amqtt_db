@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "amqtt_db"
-version = "0.1.2"
+version = "0.1.5"
 description = ""
 authors = ["volker <volker.jaenisch@inqbus.de>"]
 
@@ -16,18 +16,22 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = "^3.7"
-amqtt = "^0.10.0-alpha.3"
+amqtt = { path = "../amqtt", develop = true}
 SQLAlchemy = "^1.4.1"
-aiounittest = "^1.4.0"
-psycopg2 = "^2.8.6"
+aiounittest = "^1.4.2"
+psycopg2-binary = "^2.9.9"
 PyYAML = "^6.0.0"
-sqlalchemy-migrate = "^0.13.0"
-Sphinx = "^3.5.3"
-sphinx-rtd-theme = "^0.5.2"
-coverage = "^5.5"
+wrapt = "^1.14.0"
+typed-ast = "^1.5.5"
+alembic = "*"
+
+#sqlalchemy-migrate = "^0.13.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.3"
+Sphinx = "^3.5.3"
+sphinx-rtd-theme = "^0.5.2"
+coverage = "^5.5"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
