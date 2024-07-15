@@ -17,3 +17,9 @@ steps:
     echo Add other tasks to build, test, and deploy your project.
     echo See https://aka.ms/yaml
   displayName: 'Run a multi-line script'
+- task: DockerCompose@1
+  inputs:
+    containerregistrytype: 'Azure Container Registry'
+    azureSubscription: 'Azure subscription 1(2d40bad7-6daa-4a75-9b33-1793107acd67)'
+    dockerComposeFile: '**/docker-compose.yml'
+    action: 'Run a Docker Compose command'
